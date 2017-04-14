@@ -1,6 +1,6 @@
 # Hydrazine
 
-[![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8-orange.svg)]
+![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8-orange.svg)
 
 ***This project is unfinished and not complete yet!***
 
