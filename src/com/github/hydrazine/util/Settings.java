@@ -2,13 +2,13 @@ package com.github.hydrazine.util;
 
 import java.io.File;
 
-import com.github.hydrazine.mc.Server;
+import com.github.hydrazine.minecraft.Server;
 
 /**
  * 
  * @author xTACTIXzZ
  *
- * <br><br>This class stores the settings/options specified by the user
+ * This class stores the settings/options specified by the user
  *
  */
 public class Settings 

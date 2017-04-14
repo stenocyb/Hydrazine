@@ -6,13 +6,14 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Scanner;
-import com.github.hydrazine.mc.Credentials;
+
+import com.github.hydrazine.minecraft.Credentials;
 
 /**
  * 
  * @author xTACTIXzZ
  *
- * <br><br>This class takes a file, processes it's content, and finally returns an array of a specific type.
+ * This class takes a file, processes it's content, and finally returns an array of a specific type.
  *
  */
 public class FileFactory 

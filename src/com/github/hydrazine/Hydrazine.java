@@ -11,14 +11,14 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.github.hydrazine.mc.Server;
+import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.util.Settings;
 
 /**
  * 
  * @author xTACTIXzZ
  * 
- * <br><br>Main class of the Hydrazine project
+ * Main class of the Hydrazine project
  *
  */
 public class Hydrazine
