@@ -1,6 +1,7 @@
 # Hydrazine
 
 ![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8-orange.svg)
+![Author](https://img.shields.io/badge/Author-xTACTIXzZ-yellow.svg)
 ![Status](https://img.shields.io/badge/Status-Alpha-red.svg)
 ![ProgVer](https://img.shields.io/badge/Program%20version-1.0-blue.svg)
 
