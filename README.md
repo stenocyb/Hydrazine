@@ -3,7 +3,7 @@
 [![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8-orange.svg)](https://minecraft.net)
 [![Author](https://img.shields.io/badge/Author-xTACTIXzZ-yellow.svg)](https://github.com/xTACTIXzZ)
 [![Status](https://img.shields.io/badge/Status-Alpha-red.svg)](https://alphavulture.com/wp-content/uploads/2013/12/alpha.png)
-[![ProgVer](https://img.shields.io/badge/Program%20version-1.0-blue.svg)](::1)
+[![ProgVer](https://img.shields.io/badge/Program%20version-1.0-blue.svg)](https://github.com/xTACTIXzZ/Hydrazine)
 
 
 
