@@ -1,6 +1,6 @@
 # Hydrazine
 
-** This project is unfinished and not complete yet **
+**This project is unfinished and not complete yet**
 
 Hydrazine uses MCProtocolLib by Steveice10 to create fake minecraft players (bots). Its purpose is to check if a server is able to withstand a bot-based denial of service attack.
 
