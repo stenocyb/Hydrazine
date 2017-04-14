@@ -28,3 +28,7 @@ Hydrazine is a command-line based, modular program that uses MCProtocolLib by St
 
 ## How to use
 // todo
+
+## Credits :zzz:
+
+* Steveice10 for his awesome library [MCProtocolLib](https://github.com/Steveice10/MCProtocolLib)
