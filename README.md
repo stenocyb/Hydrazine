@@ -1,4 +1,4 @@
-# Hydrazine
+![Logo](http://i.imgur.com/leJZ7PB.png)
 
 [![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8-orange.svg)](https://minecraft.net)
 [![Author](https://img.shields.io/badge/Author-xTACTIXzZ-yellow.svg)](https://github.com/xTACTIXzZ)
