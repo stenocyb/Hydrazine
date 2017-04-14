@@ -7,7 +7,7 @@ import java.io.IOException;
  * 
  * @author xTACTIXzZ
  * 
- * <br><br>This class starts jar files.
+ * This class starts jar files.
  *
  */
 public class ModuleManager 
