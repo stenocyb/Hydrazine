@@ -13,3 +13,10 @@ Hydrazine uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10
 * Module support
   * Default modules
   * Custom / third party modules
+
+
+## Modules
+// todo
+
+## How to use
+// todo
