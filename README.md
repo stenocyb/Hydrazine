@@ -2,7 +2,7 @@
 
 **This project is unfinished and not complete yet**
 
-Hydrazine uses MCProtocolLib by Steveice10 ([Repo](https://github.com/Steveice10/MCProtocolLib)) to create fake minecraft players (bots). Its purpose is to check if a server is able to withstand a bot-based denial of service attack.
+Hydrazine uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10/MCProtocolLib)) to interact with a minecraft server. Its purpose is to check if a server is able to withstand a bot-based denial of service attack.
 
 ## Features
 * Cracked and Premium Server support
