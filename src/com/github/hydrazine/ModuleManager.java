@@ -126,7 +126,7 @@ public class ModuleManager
 		}
 		else
 		{
-			System.out.println("Invalid path. Module directory is not a directory.");
+			System.out.println(Hydrazine.errorPrefix + "Invalid path. Module directory is not a directory.");
 			
 			return null;
 		}

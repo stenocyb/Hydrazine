@@ -5,6 +5,8 @@ import java.net.Proxy;
 import org.spacehq.mc.auth.exception.request.RequestException;
 import org.spacehq.mc.protocol.MinecraftProtocol;
 
+import com.github.hydrazine.Hydrazine;
+
 /**
  * 
  * @author xTACTIXzZ
@@ -35,7 +37,7 @@ public class Authenticator
 		} 
 		catch (RequestException e) 
 		{
-			System.out.println("Could not authenticate " + creds.getUsername() + ":" + creds.getPassword() + "!");	
+			System.out.println(Hydrazine.warnPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword() + "!");	
 		}
 		
 		return protocol;
@@ -56,7 +58,7 @@ public class Authenticator
 		} 
 		catch (RequestException e) 
 		{
-			System.out.println("Could not authenticate " + creds.getUsername() + ":" + creds.getPassword() + "!");	
+			System.out.println(Hydrazine.warnPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword() + "!");	
 		}
 		
 		return protocol;
