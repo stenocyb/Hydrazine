@@ -77,6 +77,10 @@ public class Hydrazine
 		{
 			// TODO: List modules
 		}
+		else if(cmd.hasOption("gu"))
+		{
+			settings.setGenerateUsernamesMethod(cmd.getOptionValue("gu"));
+		}
 		else if(cmd.hasOption("uf"))
 		{
 			settings.setUsernameFile(new File(cmd.getOptionValue("uf")));
@@ -115,6 +119,8 @@ public class Hydrazine
 		Option modOpt = new Option("m", "module", true, "Module to execute");
 		modOpt.setArgName("module");
 		Option listOpt = new Option("l", "list", false, "List available modules");
+		Option genUsrOpt = new Option("gu", "gen-user", true, "Generate usernames (random, natural, const:%username%)");
+		genUsrOpt.setArgName("method");
 		Option usrOpt = new Option("uf", "user-file", true, "File containing usernames");
 		usrOpt.setArgName("file");
 		Option accOpt = new Option("cf", "cred-file", true, "File containing valid minecraft login credentials");
@@ -131,6 +137,7 @@ public class Hydrazine
 		options.addOption(portOpt);
 		options.addOption(modOpt);
 		options.addOption(listOpt);
+		options.addOption(genUsrOpt);
 		options.addOption(usrOpt);
 		options.addOption(accOpt);
 		options.addOption(aProxyOpt);

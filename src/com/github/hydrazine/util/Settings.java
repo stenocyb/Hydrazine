@@ -16,6 +16,7 @@ public class Settings
 	
 	private Server server;
 	private String module;
+	private String genUserMethod;
 	private File userFile;
 	private File credFile;
 	private File authProxyFile;
@@ -45,6 +46,16 @@ public class Settings
 	public String getModule()
 	{
 		return module;
+	}
+	
+	public void setGenerateUsernamesMethod(String method)
+	{
+		this.genUserMethod = method;
+	}
+	
+	public String getGenerateUsernamesMethod()
+	{
+		return genUserMethod;
 	}
 	
 	public void setUsernameFile(File file)
