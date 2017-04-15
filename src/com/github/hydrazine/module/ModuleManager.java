@@ -74,20 +74,20 @@ public class ModuleManager
 	
 	/**
 	 * Returns a module extracted from a jar file.
-	 * @param filename the filename of the module
+	 * @param path the filename of the module
 	 * @return a module
 	 * @throws Exception if something goes wrong, an exception is thrown
 	 */
-	public Module getModuleFromJar(String filename) throws Exception
+	public Module getModuleFromJar(String path) throws Exception
 	{
 		Module m = null;
 		
-		JarFile modFile = new JarFile(filename);
+		JarFile modFile = new JarFile(path);
 		Manifest mf = modFile.getManifest();
 		Attributes attr = mf.getMainAttributes();
 		String mainClass = attr.getValue(Attributes.Name.MAIN_CLASS);
 		
-		Class c = new URLClassLoader(new URL[]{ new File(filename).toURI().toURL() }).loadClass(mainClass);
+		Class c = new URLClassLoader(new URL[]{ new File(path).toURI().toURL() }).loadClass(mainClass);
 		
 		Class[] interfaces = c.getInterfaces();
 		
@@ -107,7 +107,7 @@ public class ModuleManager
 		}
 		else
 		{
-			System.out.println(Hydrazine.warnPrefix + "\"" + filename +  "\" isn't a valid module. You should remove it from the directory.");
+			System.out.println(Hydrazine.warnPrefix + "\"" + path +  "\" isn't a valid module. You should remove it from the directory.");
 		}
 		
 		modFile.close();
