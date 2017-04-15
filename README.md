@@ -35,9 +35,13 @@ Hydrazine has some built-in modules that you can execute right from the beginnin
 #### External modules
 Hydrazine has the capability to execute external modules by simply running the program with the '-m' switch but this time it is followed by the absolute file path of the module.
 
-*Example:* ```java -jar Hydrazine.jar -h localhost -m /home/user/Desktop/mymodule.jar```
+*Example:* ```java -jar Hydrazine.jar -h localhost -m /home/user/Desktop/module.jar```
 
 ### Environment variable
+If have a folder that contains some external modules, you can set up an environment variable called "HYDRAZINE" (has to be uppercase, without quotation marks) with the value being the file path to that folder (e.g. /home/user/modules/) in order to simplify the process of starting external modules. Now, if you'd like to start a module from that folder, you can simply type it's name instead of the full file path to start it.
+
+*Example:*   ```java -jar Hydrazine.jar -h 127.0.0.1 -m /home/user/Desktop/module.jar```
+**Becomes:** ```java -jar Hydrazine.jar -h 127.0.0.1 -m module```
 ### How to write your own modules
 
 ## How to use
