@@ -1,4 +1,4 @@
-![Logo](http://i.imgur.com/mqn4TON.png)
+![Logo](http://i.imgur.com/Qbw9NAO.jpg)
 
 [![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8-orange.svg)](https://minecraft.net)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/mit-license.html)
