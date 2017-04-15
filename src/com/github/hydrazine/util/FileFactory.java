@@ -7,6 +7,7 @@ import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Credentials;
 
 /**
@@ -42,7 +43,7 @@ public class FileFactory
 		} 
 		catch (FileNotFoundException e) 
 		{
-			System.out.println(file.getAbsolutePath() + " not found!");
+			System.out.println(Hydrazine.errorPrefix + file.getAbsolutePath() + " not found!");
 		}
 		
 		while(s.hasNextLine())
@@ -97,7 +98,7 @@ public class FileFactory
 		} 
 		catch (FileNotFoundException e) 
 		{
-			System.out.println(file.getAbsolutePath() + " not found!");
+			System.out.println(Hydrazine.errorPrefix + file.getAbsolutePath() + " not found!");
 		}
 		
 		while(s.hasNextLine())
@@ -141,7 +142,7 @@ public class FileFactory
 		} 
 		catch (FileNotFoundException e) 
 		{
-			System.out.println(file.getAbsolutePath() + " not found!");
+			System.out.println(Hydrazine.errorPrefix + file.getAbsolutePath() + " not found!");
 		}
 		
 		while(s.hasNextLine())

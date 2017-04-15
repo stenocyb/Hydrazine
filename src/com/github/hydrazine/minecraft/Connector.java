@@ -7,6 +7,8 @@ import org.spacehq.packetlib.event.session.ConnectedEvent;
 import org.spacehq.packetlib.event.session.DisconnectedEvent;
 import org.spacehq.packetlib.event.session.SessionAdapter;
 
+import com.github.hydrazine.Hydrazine;
+
 /**
  * 
  * @author xTACTIXzZ
@@ -34,6 +36,10 @@ public class Connector
 		client.getSession().connect();
 	}
 	
+	/**
+	 * Disconnect a client
+	 * @param client A client
+	 */
 	public void disconnect(Client client)
 	{
 		client.getSession().disconnect("Disconnected by program.");
@@ -55,8 +61,10 @@ public class Connector
                 }
                 else
                 {
-                	System.out.println("Client list does not contain player: " + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName());
+                	System.out.println(Hydrazine.warnPrefix + "Client list does not contain player: " + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName());
                 }
+                
+                System.out.println(Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " disconnected from server!");
             }
             
             @Override
@@ -64,14 +72,14 @@ public class Connector
             {                
                 if(clients.contains(client))
                 {
-                	System.out.println("Client list does already contain player: " + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName());
+                	System.out.println(Hydrazine.warnPrefix + "Client list does already contain player: " + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName());
                 }
                 else
                 {
                 	clients.add(client);
                 }
                 
-                System.out.println(((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " connected to the server!");
+                System.out.println(Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " connected to the server!");
             }
         });
 	}
