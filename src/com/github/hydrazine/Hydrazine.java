@@ -42,7 +42,7 @@ public class Hydrazine
 	// Program settings
 	public static Settings settings = null;
 	
-	// Built-in modules
+	// Loaded modules
 	public static ArrayList<Module> loadedModules = new ArrayList<Module>();
 	
 	/*
@@ -57,15 +57,16 @@ public class Hydrazine
 		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = null;
 		
+		ModuleManager mm = new ModuleManager();
+		
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setOptionComparator(null); 			// Disable sorting of options
-		
 		
 		// Initialize built-in modules
 		initializeBuiltinModules();
 		
 		// Load external modules
-		loadExternalModules();
+		loadExternalModules(mm);
 		
 		// List modules when option "-l" has been specified
 		for(String s : args)
@@ -84,14 +85,12 @@ public class Hydrazine
 		} 
 		catch (ParseException e)
 		{
-			System.out.println(Hydrazine.errorPrefix + "Missing host (-h) or invalid option passed.\n");
+			System.out.println(Hydrazine.errorPrefix + "Missing host (-h) or missing module (-m) or invalid option passed.\n");
 			// Print help when invalid syntax
 			formatter.printHelp(100, "hydrazine [Options] -h SERVER", "\nOPTIONS:", options, "\nEXAMPLES:\n hydrazine -h www.example.com -p 30000 -m info -uf /path/to/usernames.txt");
 			
 			System.exit(0);
 		}
-
-		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Storing the settings in there
 		settings = new Settings();
@@ -135,8 +134,50 @@ public class Hydrazine
 		
 		settings.setServer(server);
 		
-		// TODO continue
+		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
+		// Start internal module
+		if(!settings.getModule().contains(".jar"))
+		{
+			boolean foundModule = false;
+			
+			for(Module m : loadedModules)
+			{
+				if(m.getName().equalsIgnoreCase(settings.getModule()))
+				{
+					m.start();
+					
+					foundModule = true;
+					
+					break;
+				}
+			}
+			
+			if(!foundModule)
+			{
+				System.out.println(Hydrazine.warnPrefix + "Couldn't find module \"" + settings.getModule() + "\""); 
+			}
+		}
+		else // Start external module
+		{
+			Module m = null;
+			
+			try 
+			{
+				m = mm.getModuleFromJar(settings.getModule());
+			} 
+			catch (Exception e) 
+			{
+				System.out.println(Hydrazine.errorPrefix + "Couldn't find module \"" + settings.getModule() + "\"");
+			}
+			
+			if(m != null)
+			{
+				m.start();
+			}
+		}
+		
+		// TODO is there something left to do? idk, i'll check tomorrow
 	}
 	
 	/*
@@ -152,6 +193,7 @@ public class Hydrazine
 		portOpt.setArgName("int");
 		Option modOpt = new Option("m", "module", true, "Module to execute");
 		modOpt.setArgName("module");
+		modOpt.setRequired(true);
 		Option listOpt = new Option("l", "list", false, "List available modules");
 		Option genUsrOpt = new Option("gu", "gen-user", true, "Generate usernames (random, natural, const:%username%)");
 		genUsrOpt.setArgName("method");
@@ -239,10 +281,8 @@ public class Hydrazine
 	/*
 	 * Load external modules
 	 */
-	private static void loadExternalModules()
-	{
-		ModuleManager mm = new ModuleManager();
-		
+	private static void loadExternalModules(ModuleManager mm)
+	{		
 		if(hasEnvVar())
 		{
 			Module[] extModules = getModulesFromEnvVar(mm);
