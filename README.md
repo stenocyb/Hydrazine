@@ -25,7 +25,20 @@ Hydrazine is a command-line based, modular program that uses MCProtocolLib by St
 
 
 ## Modules
-// todo
+### What are modules
+Modules are essential for Hydrazine to work. They add all of the functionality to the program and without them, Hydrazine would not be able to do anything.
+
+#### Built-in modules
+Hydrazine has some built-in modules that you can execute right from the beginning. To see a list of available modules, start Hydrazine with the '-l' switch. If you want to run a module from that list, you have to start Hydrazine with the '-h' and '-m' switch. '-h' needs to be followed by the target hostname or ip address and '-m' needs to be followed by the module name.
+
+*Example:* ```java -jar Hydrazine.jar -h 127.0.0.1 -m info```
+#### External modules
+Hydrazine has the capability to execute external modules by simply running the program with the '-m' switch but this time it is followed by the absolute file path of the module.
+
+*Example:* ```java -jar Hydrazine.jar -h localhost -m /home/user/Desktop/mymodule.jar```
+
+### Environment variable
+### How to write your own modules
 
 ## How to use
 // todo
