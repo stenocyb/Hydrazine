@@ -23,10 +23,13 @@ import com.github.hydrazine.util.Settings;
  */
 public class Hydrazine
 {	
-	//
+	// Logging prefixes
 	public static final String infoPrefix = "+ ";
 	public static final String errorPrefix = "Error: ";
 	public static final String warnPrefix = "Warning: ";
+	
+	// Program version
+	public static final double progVer = 1.0;
 	
 	/*
 	 * Where everything begins...
@@ -52,11 +55,11 @@ public class Hydrazine
 			System.out.println(Hydrazine.errorPrefix + "Missing host (-h) or invalid option passed.\n");
 			// Print help when invalid syntax
 			formatter.printHelp(100, "hydrazine [Options] -h SERVER", "\nOPTIONS:", options, "\nEXAMPLES:\n hydrazine -h www.example.com -p 30000 -m info -uf /path/to/usernames.txt");
-						
+			
 			System.exit(0);
 		}
 		
-		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine at " + new Date().toString() + "\n");
+		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Storing the settings in there
 		Settings settings = new Settings();
