@@ -38,7 +38,7 @@ Hydrazine has the capability to execute external modules by simply running the p
 *Example:* ```java -jar Hydrazine.jar -h localhost -m /home/user/Desktop/module.jar```
 
 ### Environment variable
-If have a folder that contains some external modules, you can set up an environment variable called "**HYDRAZINE**" (has to be uppercase, without quotation marks) with the value being the file path to that folder (e.g. /home/user/modules/) in order to simplify the process of starting external modules. Now, if you'd like to start a module from that folder, you can simply type it's name instead of the full file path to start it.
+If you have a folder that contains some external modules, you can set up an environment variable called "**HYDRAZINE**" (has to be uppercase, without quotation marks) with the value being the file path to that folder (e.g. /home/user/modules/) in order to simplify the process of starting external modules. Now, if you'd like to start a module from that folder, you can simply type it's name instead of the full file path to start it.
 
 *Example:*
 
