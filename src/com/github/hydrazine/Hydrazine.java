@@ -12,6 +12,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.github.hydrazine.minecraft.Server;
+import com.github.hydrazine.module.builtin.IconGrabModule;
+import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.util.Settings;
 
 /**
@@ -31,6 +33,9 @@ public class Hydrazine
 	// Program version
 	public static final double progVer = 1.0;
 	
+	// Program settings
+	public static Settings settings = null;
+	
 	/*
 	 * Where everything begins...
 	 */
@@ -45,6 +50,17 @@ public class Hydrazine
 		
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setOptionComparator(null); 			// Disable sorting of options
+		
+		// List modules when option "-l" has been specified
+		for(String s : args)
+		{
+			if(s.equals("-l") || s.equals("--list"))
+			{
+				listModules();
+				
+				System.exit(0);
+			}
+		}
 		
 		try 
 		{
@@ -62,7 +78,7 @@ public class Hydrazine
 		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Storing the settings in there
-		Settings settings = new Settings();
+		settings = new Settings();
 		
 		// The target server
 		Server server = new Server(cmd.getOptionValue('h'), 25565);
@@ -72,40 +88,39 @@ public class Hydrazine
 		{
 			server = new Server(cmd.getOptionValue('h'), Integer.parseInt(cmd.getOptionValue('p')));
 		}
-		else if(cmd.hasOption('m'))
+		if(cmd.hasOption('m'))
 		{
 			settings.setModule(cmd.getOptionValue('m'));
 		}
-		else if(cmd.hasOption('l'))
-		{
-			// TODO: List modules
-		}
-		else if(cmd.hasOption("gu"))
+		if(cmd.hasOption("gu"))
 		{
 			settings.setGenerateUsernamesMethod(cmd.getOptionValue("gu"));
 		}
-		else if(cmd.hasOption("uf"))
+		if(cmd.hasOption("uf"))
 		{
 			settings.setUsernameFile(new File(cmd.getOptionValue("uf")));
 		}
-		else if(cmd.hasOption("cf"))
+		if(cmd.hasOption("cf"))
 		{
 			settings.setCredentialsFile(new File(cmd.getOptionValue("cf")));
 		}
-		else if(cmd.hasOption("ap"))
+		if(cmd.hasOption("ap"))
 		{
 			settings.setAuthProxyFile(new File(cmd.getOptionValue("ap")));
 		}
-		else if(cmd.hasOption("sp"))
+		if(cmd.hasOption("sp"))
 		{
 			settings.setSocksProxyFile(new File(cmd.getOptionValue("sp")));
 		}
-		else if(cmd.hasOption("d"))
+		if(cmd.hasOption("d"))
 		{
 			settings.setDelay(Integer.parseInt(cmd.getOptionValue('d')));
 		}
 		
 		settings.setServer(server);
+		
+		//TODO run module(s) here!
+		
 	}
 	
 	/*
@@ -147,5 +162,17 @@ public class Hydrazine
 		options.addOption(sProxyOpt);
 		options.addOption(delayOpt);
 	}
+	
+	private static void listModules()
+	{
+		System.out.println(Hydrazine.infoPrefix + "Built-in modules:\n");
+		InfoModule infoM = new InfoModule();
+		System.out.println("> " + infoM.getName() + " - " + infoM.getDescription());
+		IconGrabModule iconM = new IconGrabModule();
+		System.out.println("> " + iconM.getName() + " - " + iconM.getDescription());
+		
+		System.out.println("\n" + Hydrazine.infoPrefix + "To run an external module, please specify the path of the jar file by using the switch \"-m\"");
+	}
+
 	
 }

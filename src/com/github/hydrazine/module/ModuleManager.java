@@ -15,6 +15,7 @@ import com.github.hydrazine.Hydrazine;
  * @author xTACTIXzZ
  *
  * This class manages modules.
+ * 
  */
 public class ModuleManager 
 {
