@@ -1,6 +1,7 @@
 package com.github.hydrazine;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.cli.CommandLine;
@@ -12,6 +13,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.github.hydrazine.minecraft.Server;
+import com.github.hydrazine.module.Module;
+import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.util.Settings;
@@ -30,11 +33,17 @@ public class Hydrazine
 	public static final String errorPrefix = "Error: ";
 	public static final String warnPrefix = "Warning: ";
 	
+	// Module path environment variable
+	public static final String modEnvVar = "HYDRAZINE";
+	
 	// Program version
 	public static final double progVer = 1.0;
 	
 	// Program settings
 	public static Settings settings = null;
+	
+	// Built-in modules
+	public static ArrayList<Module> loadedModules = new ArrayList<Module>();
 	
 	/*
 	 * Where everything begins...
@@ -50,6 +59,13 @@ public class Hydrazine
 		
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setOptionComparator(null); 			// Disable sorting of options
+		
+		
+		// Initialize built-in modules
+		initializeBuiltinModules();
+		
+		// Load external modules
+		loadExternalModules();
 		
 		// List modules when option "-l" has been specified
 		for(String s : args)
@@ -74,7 +90,7 @@ public class Hydrazine
 			
 			System.exit(0);
 		}
-		
+
 		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Storing the settings in there
@@ -119,7 +135,7 @@ public class Hydrazine
 		
 		settings.setServer(server);
 		
-		//TODO run module(s) here!
+		// TODO continue
 		
 	}
 	
@@ -163,16 +179,94 @@ public class Hydrazine
 		options.addOption(delayOpt);
 	}
 	
+	/*
+	 * Output available modules
+	 */
 	private static void listModules()
 	{
 		System.out.println(Hydrazine.infoPrefix + "Built-in modules:\n");
-		InfoModule infoM = new InfoModule();
-		System.out.println("> " + infoM.getName() + " - " + infoM.getDescription());
-		IconGrabModule iconM = new IconGrabModule();
-		System.out.println("> " + iconM.getName() + " - " + iconM.getDescription());
+		
+		for(Module m : loadedModules)
+		{
+			System.out.println("> " + m.getName() + " - " + m.getDescription());
+		}
 		
 		System.out.println("\n" + Hydrazine.infoPrefix + "To run an external module, please specify the path of the jar file by using the switch \"-m\"");
 	}
-
 	
+	/*
+	 * Check if environment variable exists
+	 */
+	private static boolean hasEnvVar()
+	{
+		String myEnv = System.getenv(Hydrazine.modEnvVar);
+				
+		if(myEnv == null)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	/*
+	 * Gets the modules from the directory, specified by the "hydrazine" environment variable
+	 */
+	private static Module[] getModulesFromEnvVar(ModuleManager mm)
+	{
+		ArrayList<Module> modules = new ArrayList<Module>();
+		String env = System.getenv(Hydrazine.modEnvVar);
+		File dir = new File(env);
+		
+		for(File f : mm.getJarFilesFromDir(dir))
+		{
+			try 
+			{
+				Module m = mm.getModuleFromJar(f.getAbsolutePath());
+				modules.add(m);
+			} 
+			catch (Exception e) 
+			{
+				System.out.println(Hydrazine.warnPrefix + f.getAbsolutePath() + " isn't a valid module, you should remove it.");
+			}
+		}
+		
+		return modules.toArray(new Module[modules.size()]);
+	}
+	
+	/*
+	 * Load external modules
+	 */
+	private static void loadExternalModules()
+	{
+		ModuleManager mm = new ModuleManager();
+		
+		if(hasEnvVar())
+		{
+			Module[] extModules = getModulesFromEnvVar(mm);
+			
+			if(extModules != null)
+			{
+				for(Module m : extModules)
+				{
+					loadedModules.add(m);
+				}
+			}
+		}
+	}
+	
+	/*
+	 * Initialize built-in modules
+	 */
+	private static void initializeBuiltinModules()
+	{
+		InfoModule infoM = new InfoModule();
+		loadedModules.add(infoM);
+		
+		IconGrabModule iconM = new IconGrabModule();
+		loadedModules.add(iconM);
+	}
+
 }
