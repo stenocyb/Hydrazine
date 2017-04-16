@@ -126,13 +126,13 @@ public class Hydrazine
 		{
 			settings.setSetting("genuser", cmd.getOptionValue("gu"));
 		}
-		if(cmd.hasOption("uf"))
+		if(cmd.hasOption("u"))
 		{
-			settings.setSetting("userfile", cmd.getOptionValue("uf"));
+			settings.setSetting("username", cmd.getOptionValue("uf"));
 		}
-		if(cmd.hasOption("cf"))
+		if(cmd.hasOption("cr"))
 		{
-			settings.setSetting("credfile", cmd.getOptionValue("cf"));
+			settings.setSetting("credentials", cmd.getOptionValue("cf"));
 		}
 		if(cmd.hasOption("ap"))
 		{
@@ -146,7 +146,7 @@ public class Hydrazine
 		settings.setSetting("host", server.getHost());
 		settings.setSetting("port", String.valueOf(server.getPort()));
 		
-		// Module configuration
+		// Module Helper
 		ModuleHelper mc = new ModuleHelper();
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
@@ -239,16 +239,16 @@ public class Hydrazine
 		modOpt.setRequired(true);
 		Option confOpt = new Option("c", "configure", false, "Configure a module");
 		Option listOpt = new Option("l", "list", false, "List available modules");
-		Option genUsrOpt = new Option("gu", "gen-user", true, "Generate usernames (random, natural, const:%username%)");
+		Option genUsrOpt = new Option("gu", "gen-user", true, "Generate username (random, natural, const:%username%)");
 		genUsrOpt.setArgName("method");
-		Option usrOpt = new Option("uf", "user-file", true, "File containing usernames");
-		usrOpt.setArgName("file");
-		Option accOpt = new Option("cf", "cred-file", true, "File containing valid minecraft login credentials");
-		accOpt.setArgName("file");
-		Option aProxyOpt = new Option("ap", "auth-proxy", true, "File containing authentication proxies [http(s)] (host:port)");
-		aProxyOpt.setArgName("file");
-		Option sProxyOpt = new Option("sp", "socks-proxy", true, "File containing socks proxies (host:port)");
-		sProxyOpt.setArgName("file");
+		Option usrOpt = new Option("u", "username", true, "A minecraft username");
+		usrOpt.setArgName("name");
+		Option accOpt = new Option("cr", "credentials", true, "Credentials of a minecraft account. (Format: username/email:password)");
+		accOpt.setArgName("creds");
+		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy used for authentication. (https)");
+		aProxyOpt.setArgName("proxy");
+		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy used to connect to a server. (socks)");
+		sProxyOpt.setArgName("proxy");
 
 		// Add options
 		options.addOption(hostOpt);
