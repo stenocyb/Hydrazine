@@ -3,7 +3,6 @@ package com.github.hydrazine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -15,6 +14,7 @@ import org.apache.commons.cli.ParseException;
 
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
+import com.github.hydrazine.module.ModuleHelper;
 import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
@@ -33,6 +33,7 @@ public class Hydrazine
 	public static final String infoPrefix = "+ ";
 	public static final String errorPrefix = "Error: ";
 	public static final String warnPrefix = "Warning: ";
+	public static final String inputPrefix = "> ";
 	
 	// Module path environment variable
 	public static final String modEnvVar = "HYDRAZINE";
@@ -61,7 +62,7 @@ public class Hydrazine
 		ModuleManager mm = new ModuleManager();
 		
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.setOptionComparator(null); 			// Disable sorting of options
+		formatter.setOptionComparator(null); // Disable sorting of options
 		
 		// Initialize built-in modules
 		initializeBuiltinModules();
@@ -112,7 +113,7 @@ public class Hydrazine
 			}
 			catch(Exception e)
 			{
-				System.out.println(Hydrazine.errorPrefix + "The specified port is not a valid number. Using 25565.");
+				System.out.println(Hydrazine.errorPrefix + "The specified port is not a valid number. Using default port. (25565)");
 			}
 			
 			server = new Server(cmd.getOptionValue('h'), port);
@@ -145,6 +146,9 @@ public class Hydrazine
 		settings.setSetting("host", server.getHost());
 		settings.setSetting("port", String.valueOf(server.getPort()));
 		
+		// Module configuration
+		ModuleHelper mc = new ModuleHelper();
+		
 		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Start internal module
@@ -160,7 +164,12 @@ public class Hydrazine
 					{
 						m.configure();
 						
-						askToStart(m);
+						boolean answer = mc.askUserYesNo("Start module \'" + m.getName() + "\'?");
+						
+						if(answer)
+						{							
+							m.start();
+						}
 					}
 					else // Start module if '-c' switch is not present
 					{
@@ -197,7 +206,12 @@ public class Hydrazine
 				{
 					m.configure();
 					
-					askToStart(m);
+					boolean answer = mc.askUserYesNo("Start module \'" + m.getName() + "\'?");
+					
+					if(answer)
+					{
+						m.start();
+					}
 				}
 				else // Start module if '-c' switch is not present
 				{
@@ -247,25 +261,6 @@ public class Hydrazine
 		options.addOption(accOpt);
 		options.addOption(aProxyOpt);
 		options.addOption(sProxyOpt);
-	}
-	
-	/*
-	 * Ask if the module should be started
-	 */
-	private static void askToStart(Module m) 
-	{
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.print(Hydrazine.infoPrefix + "Start module? [Y/n] ");
-		
-		String answer = sc.nextLine();
-		
-		if(!(answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")))
-		{
-			System.out.println("---");
-			
-			m.start();
-		}
 	}
 	
 	/*
