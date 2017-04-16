@@ -46,7 +46,7 @@ public class InfoModule implements Module
 		Server server = Hydrazine.settings.getServer();
 		MinecraftProtocol protocol = new MinecraftProtocol(SubProtocol.STATUS);
         Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory());
-                
+                        
         client.getSession().setFlag(MinecraftConstants.SERVER_INFO_HANDLER_KEY, new ServerInfoHandler() 
         {
             @Override
@@ -57,7 +57,7 @@ public class InfoModule implements Module
                 System.out.println(Hydrazine.infoPrefix + "Players: " + Arrays.toString(info.getPlayerInfo().getPlayers()));
                 System.out.println(Hydrazine.infoPrefix + "Description: " + info.getDescription().getFullText());
                 System.out.println(Hydrazine.infoPrefix + "Icon: " + info.getIcon().getHeight() + "px height; " + info.getIcon().getWidth() + "px width");
-                
+                                
                 hasRetrieved++;
             }
         });
@@ -98,4 +98,9 @@ public class InfoModule implements Module
 		System.out.println(Hydrazine.infoPrefix + "Finished module. Goodbye!");
 	}
 
+	@Override
+	public void configure() 
+	{
+		System.out.println(Hydrazine.infoPrefix + "This module can't be configured.");
+	}
 }
