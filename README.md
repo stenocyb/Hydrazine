@@ -44,7 +44,7 @@ If you have a folder that contains some external modules, you can set up an envi
 
 **This:**
 
-```java -jar Hydrazine.jar -h 127.0.0.1 -m /home/user/Desktop/module.jar```
+```java -jar Hydrazine.jar -h 127.0.0.1 -m /home/user/modules/module.jar```
 
 **Becomes this:**
 
