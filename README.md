@@ -23,6 +23,8 @@ Hydrazine is a command-line based, modular program that uses MCProtocolLib by St
   * Default modules
   * Custom / third party modules
 
+## How to use Hydrazine
+// todo
 
 ## Modules
 ### What are modules
@@ -51,9 +53,6 @@ If you have a folder that contains some external modules, you can set up an envi
 ```java -jar Hydrazine.jar -h 127.0.0.1 -m module```
 
 ### How to write your own modules
-// todo
-
-## How to use
 // todo
 
 ## Credits :zzz:
