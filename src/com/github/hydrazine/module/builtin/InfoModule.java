@@ -1,7 +1,6 @@
 package com.github.hydrazine.module.builtin;
 
-import java.util.Arrays;
-
+import org.spacehq.mc.auth.data.GameProfile;
 import org.spacehq.mc.protocol.MinecraftConstants;
 import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.data.SubProtocol;
@@ -43,10 +42,10 @@ public class InfoModule implements Module
 	@Override
 	public void start() 
 	{
-		Server server = Hydrazine.settings.getServer();
+		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
 		MinecraftProtocol protocol = new MinecraftProtocol(SubProtocol.STATUS);
         Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory());
-                        
+                                
         client.getSession().setFlag(MinecraftConstants.SERVER_INFO_HANDLER_KEY, new ServerInfoHandler() 
         {
             @Override
@@ -54,8 +53,14 @@ public class InfoModule implements Module
             {
                 System.out.println(Hydrazine.infoPrefix + "Version: " + info.getVersionInfo().getVersionName() + ", Protocol Version: " + info.getVersionInfo().getProtocolVersion());
                 System.out.println(Hydrazine.infoPrefix + "Player Count: " + info.getPlayerInfo().getOnlinePlayers() + " / " + info.getPlayerInfo().getMaxPlayers());
-                System.out.println(Hydrazine.infoPrefix + "Players: " + Arrays.toString(info.getPlayerInfo().getPlayers()));
-                System.out.println(Hydrazine.infoPrefix + "Description: " + info.getDescription().getFullText());
+                System.out.print(Hydrazine.infoPrefix + "Players: ");
+                
+                for(GameProfile gp : info.getPlayerInfo().getPlayers())
+                {
+                	System.out.print(gp.getName() + " ");
+                }
+                                
+                System.out.println("\n" + Hydrazine.infoPrefix + "Description: " + info.getDescription().getFullText());
                 System.out.println(Hydrazine.infoPrefix + "Icon: " + info.getIcon().getHeight() + "px height; " + info.getIcon().getWidth() + "px width");
                                 
                 hasRetrieved++;

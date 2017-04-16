@@ -1,8 +1,6 @@
 package com.github.hydrazine.util;
 
-import java.io.File;
-
-import com.github.hydrazine.minecraft.Server;
+import java.util.HashMap;
 
 /**
  * 
@@ -14,87 +12,35 @@ import com.github.hydrazine.minecraft.Server;
 public class Settings 
 {
 	
-	private Server server;
-	private String module;
-	private String genUserMethod;
-	private File userFile;
-	private File credFile;
-	private File authProxyFile;
-	private File socksProxyFile;
+	private HashMap<String, String> settings;
 	
 	public Settings()
 	{
-		
+		settings = new HashMap<String, String>();
 	}
 	
-	public void setServer(Server server)
+	/**
+	 * Returns the setting corresponding to the key
+	 */
+	public String getSetting(String key)
 	{
-		this.server = server;
+		return settings.get(key);
 	}
 	
-	public Server getServer()
+	/**
+	 * Sets a setting
+	 */
+	public void setSetting(String key, String value)
 	{
-		return server;
+		settings.put(key, value);
 	}
 	
-	public void setModule(String module)
+	/**
+	 * Checks if the setting exists
+	 */
+	public boolean containsSetting(String key)
 	{
-		this.module = module;
-	}
-
-	public String getModule()
-	{
-		return module;
-	}
-	
-	public void setGenerateUsernamesMethod(String method)
-	{
-		this.genUserMethod = method;
-	}
-	
-	public String getGenerateUsernamesMethod()
-	{
-		return genUserMethod;
-	}
-	
-	public void setUsernameFile(File file)
-	{
-		this.userFile = file;
-	}
-	
-	public File getUsernameFile()
-	{
-		return userFile;
-	}
-	
-	public void setCredentialsFile(File file)
-	{
-		this.credFile = file;
-	}
-	
-	public File getCredentialsFile()
-	{
-		return credFile;
-	}
-	
-	public void setAuthProxyFile(File file)
-	{
-		this.authProxyFile = file;
-	}
-	
-	public File getAuthProxyFile()
-	{
-		return authProxyFile;
-	}
-	
-	public void setSocksProxyFile(File file)
-	{
-		this.socksProxyFile = file;
-	}
-	
-	public File getSocksProxyFile()
-	{
-		return socksProxyFile;
+		return settings.containsKey(key);
 	}
 	
 }

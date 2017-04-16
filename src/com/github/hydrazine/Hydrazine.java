@@ -104,45 +104,57 @@ public class Hydrazine
 		// Validating options
 		if(cmd.hasOption('p'))
 		{
-			server = new Server(cmd.getOptionValue('h'), Integer.parseInt(cmd.getOptionValue('p')));
+			int port = 25565;
+			
+			try
+			{
+				port = Integer.parseInt(cmd.getOptionValue("p"));
+			}
+			catch(Exception e)
+			{
+				System.out.println(Hydrazine.errorPrefix + "The specified port is not a valid number. Using 25565.");
+			}
+			
+			server = new Server(cmd.getOptionValue('h'), port);
 		}
 		if(cmd.hasOption('m'))
 		{
-			settings.setModule(cmd.getOptionValue('m'));
+			settings.setSetting("module", cmd.getOptionValue('m'));
 		}
 		if(cmd.hasOption("gu"))
 		{
-			settings.setGenerateUsernamesMethod(cmd.getOptionValue("gu"));
+			settings.setSetting("genuser", cmd.getOptionValue("gu"));
 		}
 		if(cmd.hasOption("uf"))
 		{
-			settings.setUsernameFile(new File(cmd.getOptionValue("uf")));
+			settings.setSetting("userfile", cmd.getOptionValue("uf"));
 		}
 		if(cmd.hasOption("cf"))
 		{
-			settings.setCredentialsFile(new File(cmd.getOptionValue("cf")));
+			settings.setSetting("credfile", cmd.getOptionValue("cf"));
 		}
 		if(cmd.hasOption("ap"))
 		{
-			settings.setAuthProxyFile(new File(cmd.getOptionValue("ap")));
+			settings.setSetting("authproxy", cmd.getOptionValue("ap"));
 		}
 		if(cmd.hasOption("sp"))
 		{
-			settings.setSocksProxyFile(new File(cmd.getOptionValue("sp")));
+			settings.setSetting("socksproxy", cmd.getOptionValue("sp"));
 		}
 		
-		settings.setServer(server);
+		settings.setSetting("host", server.getHost());
+		settings.setSetting("port", String.valueOf(server.getPort()));
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Start internal module
-		if(!settings.getModule().contains(".jar"))
+		if(!settings.getSetting("module").contains(".jar"))
 		{
 			boolean foundModule = false;
 			
 			for(Module m : loadedModules)
 			{
-				if(m.getName().equalsIgnoreCase(settings.getModule()))
+				if(m.getName().equalsIgnoreCase(settings.getSetting("module")))
 				{
 					if(cmd.hasOption('c')) // Configure module if '-c' switch is present
 					{
@@ -163,7 +175,7 @@ public class Hydrazine
 			
 			if(!foundModule)
 			{
-				System.out.println(Hydrazine.warnPrefix + "Couldn't find module \"" + settings.getModule() + "\""); 
+				System.out.println(Hydrazine.warnPrefix + "Couldn't find module \"" + settings.getSetting("module") + "\""); 
 			}
 		}
 		else // Start external module
@@ -172,11 +184,11 @@ public class Hydrazine
 			
 			try 
 			{
-				m = mm.getModuleFromJar(settings.getModule());
+				m = mm.getModuleFromJar(settings.getSetting("module"));
 			} 
 			catch (Exception e) 
 			{
-				System.out.println(Hydrazine.warnPrefix + "Couldn't find module \"" + settings.getModule() + "\"");
+				System.out.println(Hydrazine.warnPrefix + "Couldn't find module \"" + settings.getSetting("module") + "\"");
 			}
 			
 			if(m != null)
@@ -194,26 +206,9 @@ public class Hydrazine
 			}
 		}
 		
-		// TODO is there something left to do? idk, i'll check tomorrow
+		// TODO End of main method, something left to do?
 	}
 	
-	/*
-	 * Ask if the module should be started
-	 */
-	private static void askToStart(Module m) 
-	{
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.println(Hydrazine.infoPrefix + "Start module? [Y/n]");
-		
-		String answer = sc.nextLine();
-		
-		if(!(answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")))
-		{
-			m.start();
-		}
-	}
-
 	/*
 	 * Register options
 	 */
@@ -252,6 +247,25 @@ public class Hydrazine
 		options.addOption(accOpt);
 		options.addOption(aProxyOpt);
 		options.addOption(sProxyOpt);
+	}
+	
+	/*
+	 * Ask if the module should be started
+	 */
+	private static void askToStart(Module m) 
+	{
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.print(Hydrazine.infoPrefix + "Start module? [Y/n] ");
+		
+		String answer = sc.nextLine();
+		
+		if(!(answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")))
+		{
+			System.out.println("---");
+			
+			m.start();
+		}
 	}
 	
 	/*
