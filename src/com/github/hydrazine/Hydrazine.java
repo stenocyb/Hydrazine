@@ -3,6 +3,7 @@ package com.github.hydrazine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -129,10 +130,6 @@ public class Hydrazine
 		{
 			settings.setSocksProxyFile(new File(cmd.getOptionValue("sp")));
 		}
-		if(cmd.hasOption("d"))
-		{
-			settings.setDelay(Integer.parseInt(cmd.getOptionValue('d')));
-		}
 		
 		settings.setServer(server);
 		
@@ -147,11 +144,13 @@ public class Hydrazine
 			{
 				if(m.getName().equalsIgnoreCase(settings.getModule()))
 				{
-					if(cmd.hasOption('c'))	// Configure module if '-c' switch is present
+					if(cmd.hasOption('c')) // Configure module if '-c' switch is present
 					{
 						m.configure();
+						
+						askToStart(m);
 					}
-					else					// Start module if '-c' switch is not present
+					else // Start module if '-c' switch is not present
 					{
 						m.start();
 					}
@@ -182,11 +181,13 @@ public class Hydrazine
 			
 			if(m != null)
 			{
-				if(cmd.hasOption('c')) 	// Configure module if '-c' switch is present
+				if(cmd.hasOption('c')) // Configure module if '-c' switch is present
 				{
 					m.configure();
+					
+					askToStart(m);
 				}
-				else					// Start module if '-c' switch is not present
+				else // Start module if '-c' switch is not present
 				{
 					m.start();
 				}
@@ -196,6 +197,23 @@ public class Hydrazine
 		// TODO is there something left to do? idk, i'll check tomorrow
 	}
 	
+	/*
+	 * Ask if the module should be started
+	 */
+	private static void askToStart(Module m) 
+	{
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.println(Hydrazine.infoPrefix + "Start module? [Y/n]");
+		
+		String answer = sc.nextLine();
+		
+		if(!(answer.equalsIgnoreCase("n") || answer.equalsIgnoreCase("no")))
+		{
+			m.start();
+		}
+	}
+
 	/*
 	 * Register options
 	 */
@@ -222,9 +240,7 @@ public class Hydrazine
 		aProxyOpt.setArgName("file");
 		Option sProxyOpt = new Option("sp", "socks-proxy", true, "File containing socks proxies (host:port)");
 		sProxyOpt.setArgName("file");
-		Option delayOpt = new Option("d", "delay", true, "Delay before connection; in milliseconds");
-		delayOpt.setArgName("millis");
-		
+
 		// Add options
 		options.addOption(hostOpt);
 		options.addOption(portOpt);
@@ -236,7 +252,6 @@ public class Hydrazine
 		options.addOption(accOpt);
 		options.addOption(aProxyOpt);
 		options.addOption(sProxyOpt);
-		options.addOption(delayOpt);
 	}
 	
 	/*
