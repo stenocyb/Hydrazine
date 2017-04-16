@@ -21,7 +21,6 @@ public class Settings
 	private File credFile;
 	private File authProxyFile;
 	private File socksProxyFile;
-	private int delay;
 	
 	public Settings()
 	{
@@ -96,16 +95,6 @@ public class Settings
 	public File getSocksProxyFile()
 	{
 		return socksProxyFile;
-	}
-	
-	public void setDelay(int delay)
-	{
-		this.delay = delay;
-	}
-	
-	public int getDelay()
-	{
-		return delay;
 	}
 	
 }
