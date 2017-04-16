@@ -24,7 +24,7 @@ Hydrazine is a command-line based, modular program that uses MCProtocolLib by St
   * Custom / third party modules
 
 ## How to use Hydrazine
-// todo
+[Tutorial](https://github.com/xTACTIXzZ/Hydrazine/wiki/How-to-use-Hydrazine)
 
 ## Modules
 ### What are modules
