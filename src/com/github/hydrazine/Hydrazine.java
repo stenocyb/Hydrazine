@@ -41,7 +41,7 @@ public class Hydrazine
 	
 	// Program settings
 	public static Settings settings = null;
-	
+		
 	// Loaded modules
 	public static ArrayList<Module> loadedModules = new ArrayList<Module>();
 	
@@ -68,9 +68,10 @@ public class Hydrazine
 		// Load external modules
 		loadExternalModules(mm);
 		
-		// List modules when option "-l" has been specified
+		// Option(s) without argument
 		for(String s : args)
 		{
+			// List modules when option "-l" has been passed
 			if(s.equals("-l") || s.equals("--list"))
 			{
 				listModules();
@@ -79,6 +80,7 @@ public class Hydrazine
 			}
 		}
 		
+		// Parse options
 		try 
 		{
 			cmd = parser.parse(options, args);
@@ -145,8 +147,15 @@ public class Hydrazine
 			{
 				if(m.getName().equalsIgnoreCase(settings.getModule()))
 				{
-					m.start();
-					
+					if(cmd.hasOption('c'))	// Configure module if '-c' switch is present
+					{
+						m.configure();
+					}
+					else					// Start module if '-c' switch is not present
+					{
+						m.start();
+					}
+						
 					foundModule = true;
 					
 					break;
@@ -168,12 +177,19 @@ public class Hydrazine
 			} 
 			catch (Exception e) 
 			{
-				System.out.println(Hydrazine.errorPrefix + "Couldn't find module \"" + settings.getModule() + "\"");
+				System.out.println(Hydrazine.warnPrefix + "Couldn't find module \"" + settings.getModule() + "\"");
 			}
 			
 			if(m != null)
 			{
-				m.start();
+				if(cmd.hasOption('c')) 	// Configure module if '-c' switch is present
+				{
+					m.configure();
+				}
+				else					// Start module if '-c' switch is not present
+				{
+					m.start();
+				}
 			}
 		}
 		
@@ -194,6 +210,7 @@ public class Hydrazine
 		Option modOpt = new Option("m", "module", true, "Module to execute");
 		modOpt.setArgName("module");
 		modOpt.setRequired(true);
+		Option confOpt = new Option("c", "configure", false, "Configure a module");
 		Option listOpt = new Option("l", "list", false, "List available modules");
 		Option genUsrOpt = new Option("gu", "gen-user", true, "Generate usernames (random, natural, const:%username%)");
 		genUsrOpt.setArgName("method");
@@ -212,6 +229,7 @@ public class Hydrazine
 		options.addOption(hostOpt);
 		options.addOption(portOpt);
 		options.addOption(modOpt);
+		options.addOption(confOpt);
 		options.addOption(listOpt);
 		options.addOption(genUsrOpt);
 		options.addOption(usrOpt);

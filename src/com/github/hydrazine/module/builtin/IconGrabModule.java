@@ -131,4 +131,10 @@ public class IconGrabModule implements Module
 		System.out.println(Hydrazine.infoPrefix + "Finished module. Goodbye!");
 	}
 
+	@Override
+	public void configure() 
+	{
+		System.out.println(Hydrazine.infoPrefix + "This module can't be configured.");
+	}
+
 }
