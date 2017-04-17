@@ -18,6 +18,7 @@ import com.github.hydrazine.module.ModuleHelper;
 import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
+import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
 import com.github.hydrazine.util.Settings;
 
@@ -353,6 +354,9 @@ public class Hydrazine
 		
 		ChatReaderModule chatReaderM = new ChatReaderModule();
 		loadedModules.add(chatReaderM);
+		
+		ChatModule chatM = new ChatModule();
+		loadedModules.add(chatM);
 	}
 
 }

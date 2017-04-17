@@ -61,7 +61,6 @@ public class InfoModule implements Module
                 }
                                 
                 System.out.println("\n" + Hydrazine.infoPrefix + "Description: " + info.getDescription().getFullText());
-                System.out.println(Hydrazine.infoPrefix + "Icon: " + info.getIcon().getHeight() + "px height; " + info.getIcon().getWidth() + "px width");
                                 
                 hasRetrieved++;
             }
