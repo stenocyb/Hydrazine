@@ -32,13 +32,18 @@ public class Settings
 	 */
 	public void setSetting(String key, String value)
 	{
+		if(settings.containsKey(key))
+		{
+			settings.remove(key);
+		}
+		
 		settings.put(key, value);
 	}
 	
 	/**
 	 * Checks if the setting exists
 	 */
-	public boolean containsSetting(String key)
+	public boolean hasSetting(String key)
 	{
 		return settings.containsKey(key);
 	}
