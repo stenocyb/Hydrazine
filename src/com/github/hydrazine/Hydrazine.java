@@ -18,6 +18,7 @@ import com.github.hydrazine.module.ModuleHelper;
 import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
+import com.github.hydrazine.module.builtin.ChatReaderModule;
 import com.github.hydrazine.util.Settings;
 
 /**
@@ -128,11 +129,11 @@ public class Hydrazine
 		}
 		if(cmd.hasOption("u"))
 		{
-			settings.setSetting("username", cmd.getOptionValue("uf"));
+			settings.setSetting("username", cmd.getOptionValue("u"));
 		}
 		if(cmd.hasOption("cr"))
 		{
-			settings.setSetting("credentials", cmd.getOptionValue("cf"));
+			settings.setSetting("credentials", cmd.getOptionValue("cr"));
 		}
 		if(cmd.hasOption("ap"))
 		{
@@ -173,7 +174,7 @@ public class Hydrazine
 					}
 					else // Start module if '-c' switch is not present
 					{
-						m.start();
+						m.start();				
 					}
 						
 					foundModule = true;
@@ -245,9 +246,9 @@ public class Hydrazine
 		usrOpt.setArgName("name");
 		Option accOpt = new Option("cr", "credentials", true, "Credentials of a minecraft account. (Format: username/email:password)");
 		accOpt.setArgName("creds");
-		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy used for authentication. (https)");
+		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy used for authentication. Format: host:port (https)");
 		aProxyOpt.setArgName("proxy");
-		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy used to connect to a server. (socks)");
+		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy used to connect to a server. Format: host:port (socks)");
 		sProxyOpt.setArgName("proxy");
 
 		// Add options
@@ -349,6 +350,9 @@ public class Hydrazine
 		
 		IconGrabModule iconM = new IconGrabModule();
 		loadedModules.add(iconM);
+		
+		ChatReaderModule chatReaderM = new ChatReaderModule();
+		loadedModules.add(chatReaderM);
 	}
 
 }

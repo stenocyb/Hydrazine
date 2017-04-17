@@ -27,6 +27,36 @@ public class UsernameGenerator
 	}
 	
 	/**
+	 * Delivers a username by specifying the generation method
+	 * @param method the generation method
+	 * @return A username
+	 */
+	public String deliverUsername(String method)
+	{
+		if(method.equalsIgnoreCase("random"))
+		{
+			return generateRandom(16);
+		}
+		else if(method.equalsIgnoreCase("natural"))
+		{
+			return generateNatural();
+		}
+		else if(method.startsWith("const"))
+		{
+			String[] parts = method.split(":");
+			String base = parts[1];
+			
+			return constantUsername(base);
+		}
+		else
+		{
+			System.out.println(Hydrazine.errorPrefix + "Invalid username generation method specified.");
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Generates a completely random username 
 	 * @param length The desired length the username should have
 	 * @return A generated, valid minecraft username

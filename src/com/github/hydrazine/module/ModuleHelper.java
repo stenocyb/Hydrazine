@@ -14,8 +14,12 @@ import com.github.hydrazine.Hydrazine;
 public class ModuleHelper
 {
 
+	private Scanner sc = null;
+	
 	public ModuleHelper()
 	{
+		sc = new Scanner(System.in);
+		
 		/*
 		 * Maybe I will add more to this class later.
 		 */
@@ -27,15 +31,11 @@ public class ModuleHelper
 	 * @return the answer from the user
 	 */
 	public String askUser(String question)
-	{
-		Scanner sc = new Scanner(System.in);
-		
+	{		
 		System.out.println(Hydrazine.inputPrefix + question);
 		
 		String reply = sc.nextLine();
-		
-		sc.close();
-		
+				
 		return reply;
 	}
 	
@@ -46,14 +46,10 @@ public class ModuleHelper
 	 */
 	public boolean askUserYesNo(String question)
 	{
-		Scanner sc = new Scanner(System.in);
-
 		System.out.print(Hydrazine.inputPrefix + question + " [Yes/No]: ");
 		
 		String reply = sc.nextLine();
-		
-		sc.close();
-		
+				
 		// Check if answer is yes
 		if(reply.equalsIgnoreCase("y") || reply.equalsIgnoreCase("yes") || reply.equalsIgnoreCase("yeah")) // ;)
 		{
