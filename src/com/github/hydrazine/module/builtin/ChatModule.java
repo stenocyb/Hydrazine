@@ -4,20 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Properties;
 import java.util.Scanner;
 
 import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
-import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import org.spacehq.packetlib.Client;
-import org.spacehq.packetlib.event.session.ConnectedEvent;
-import org.spacehq.packetlib.event.session.DisconnectedEvent;
-import org.spacehq.packetlib.event.session.PacketReceivedEvent;
-import org.spacehq.packetlib.event.session.SessionAdapter;
-
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
 import com.github.hydrazine.minecraft.ClientFactory;
@@ -25,8 +18,16 @@ import com.github.hydrazine.minecraft.Credentials;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleHelper;
-import com.github.hydrazine.util.UsernameGenerator;
+import com.github.hydrazine.util.AuthType;
+import com.github.hydrazine.util.ConnectionHelper;
 
+/**
+ * 
+ * @author xTACTIXzZ
+ * 
+ * Connects a client to a server and lets you send chat messages.
+ *
+ */
 public class ChatModule implements Module
 {
 
@@ -61,6 +62,8 @@ public class ChatModule implements Module
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 
+		Scanner sc = new Scanner(System.in);
+		
 		Authenticator auth = new Authenticator();
 		ClientFactory factory = new ClientFactory();
 		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
@@ -68,72 +71,51 @@ public class ChatModule implements Module
 		// Server has offline mode enabled
 		if(Hydrazine.settings.hasSetting("username") || Hydrazine.settings.hasSetting("genuser"))
 		{
-			if(Hydrazine.settings.hasSetting("username"))
+			String username = AuthType.CRACKED.getUsername();
+			
+			MinecraftProtocol protocol = new MinecraftProtocol(username);
+			
+			Client client = ConnectionHelper.connect(factory, protocol, server);
+			
+			while(client.getSession().isConnected())
 			{
-				String username = Hydrazine.settings.getSetting("username");
-				
-				MinecraftProtocol protocol = auth.authenticate(username);
-				
-				connect(factory, protocol, server);
+				doStuff(client, sc);
 			}
-			else
-			{
-				String method = Hydrazine.settings.getSetting("genuser");
-				
-				UsernameGenerator ug = new UsernameGenerator();
-				
-				String username = ug.deliverUsername(method);
-				
-				MinecraftProtocol protocol = auth.authenticate(username);
-				
-				connect(factory, protocol, server);
-			}
+			
+			sc.close();
+			
+			stop();
 		}
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
 		{
-			Credentials creds = null;
-			
-			try
-			{
-				String[] parts = Hydrazine.settings.getSetting("credentials").split(":");
-				creds = new Credentials(parts[0], parts[1]);
-			}
-			catch(Exception e)
-			{
-				System.out.println(Hydrazine.errorPrefix + "Invalid value for switch -cr");
-				
-				return;
-			}
+			Credentials creds = AuthType.CREDENTIALS.getCredentials();
+			Client client = null;
 			
 			// Check if auth proxy should be used
 			if(Hydrazine.settings.hasSetting("authproxy"))
 			{
-				Proxy proxy = null;
-				
-				try
-				{
-					String[] parts = Hydrazine.settings.getSetting("authproxy").split(":");
-					proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(parts[0], Integer.parseInt(parts[1])));
-				}
-				catch(Exception e)
-				{
-					System.out.println(Hydrazine.errorPrefix + "Invalid value for switch -ap");
-					
-					return;
-				}
+				Proxy proxy = AuthType.CREDENTIALS.getAuthProxy();
 				
 				MinecraftProtocol protocol = auth.authenticate(creds, proxy);
 				
-				connect(factory, protocol, server);
+				client = ConnectionHelper.connect(factory, protocol, server);
 			}
 			else
 			{				
 				MinecraftProtocol protocol = auth.authenticate(creds);
 				
-				connect(factory, protocol, server);
+				client = ConnectionHelper.connect(factory, protocol, server);
 			}
 			
+			while(client.getSession().isConnected())
+			{
+				doStuff(client, sc);
+			}
+			
+			sc.close();
+			
+			stop();
 		}
 		// User forgot to pass the options
 		else
@@ -199,166 +181,70 @@ public class ChatModule implements Module
 	}
 	
 	/*
-	 * Register listeners
+	 * Does all the input and chatting
 	 */
-	private void registerListeners(Client client)
-	{
-		client.getSession().addListener(new SessionAdapter() 
-		{
-            @Override
-            public void packetReceived(PacketReceivedEvent event) 
-            {
-                if(event.getPacket() instanceof ServerJoinGamePacket) 
-                {
-                     System.out.println("\n" + Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " joined the game!");
-                }
-            }
-            
-            @Override
-            public void connected(ConnectedEvent event)
-            {
-                System.out.println(Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " connected to the server!");
-            }
-
-            @Override
-            public void disconnected(DisconnectedEvent event) 
-            {
-            	System.out.println(Hydrazine.infoPrefix + "Client disconnected: " + event.getReason());
-            	            	
-            	System.exit(1);
-            }
-        });
-	}
-	
-	/*
-	 * Connect client to server
-	 */
-	private void connect(ClientFactory factory, MinecraftProtocol protocol, Server server)
-	{
-		// Check if authenticated successfully
-		if(protocol == null)
-		{
-			System.out.println(Hydrazine.errorPrefix + "Could not authenticate, possibly invalid credentials.");
-			
-			return;
-		}
+	private void doStuff(Client client, Scanner sc)
+	{	
+		System.out.print(Hydrazine.inputPrefix);
 		
-		// Check if socks proxy should be used
-		if(Hydrazine.settings.hasSetting("socksproxy"))
+		String line = sc.nextLine();
+		
+		if(line.contains("%%"))
 		{
-			Proxy proxy = null;
+			int sendTime = 1;
+			int index = line.indexOf("%");
+			
+			String buf = "";
+			
+			if(line.length() == index + 3)
+			{
+				buf = line.substring(index, index + 3);
+			}
+			else if(line.length() == index + 4)
+			{
+				buf = line.substring(index, index + 4);
+			}
+			
+			String s = buf.replaceAll("%%", "");
+			
+			line = line.replaceAll(buf, "");
 			
 			try
 			{
-				String[] parts = Hydrazine.settings.getSetting("socksproxy").split(":");
-				proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(parts[0], Integer.parseInt(parts[1])));
+				sendTime = Integer.parseInt(s);
 			}
 			catch(Exception e)
-			{
-				System.out.println(Hydrazine.errorPrefix + "Invalid value for switch -sp");
-				
-				return;
+			{				
+				sendTime = 1;
 			}
 			
-			Client client = factory.create(server, protocol, proxy);
-			
-			registerListeners(client);
-						
-			client.getSession().connect();
-			
-			while(client.getSession().isConnected())
+			for(int i = 0; i < sendTime; i++)
 			{
-				Scanner sc = new Scanner(System.in);
+				client.getSession().send(new ClientChatPacket(line));
 				
-				System.out.print(Hydrazine.inputPrefix);
-				
-				String line = sc.nextLine();
-				
-				if(line.contains("%%"))
+				try 
 				{
-					int index = line.indexOf("%");
-					String buf = line.substring(index, index + 3);
-					
-					String s = buf.replaceAll("%%", "");
-					
-					line = line.replaceAll(buf, "");
-					
-					try
-					{
-						amplifier = Integer.parseInt(s);
-					}
-					catch(Exception e)
-					{
-						// Ignore
-						
-						continue;
-					}
-				}
-				
-				for(int i = 0; i < amplifier; i++)
+					Thread.sleep(Integer.parseInt(properties.getProperty("amplDelay")));
+				} 
+				catch (InterruptedException e)
 				{
-					client.getSession().send(new ClientChatPacket(line));
-					
-					try 
-					{
-						Thread.sleep(Integer.parseInt(properties.getProperty("amplDelay")));
-					} 
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
+					e.printStackTrace();
 				}
 			}
 		}
 		else
 		{
-			Client client = factory.create(server, protocol);
-			
-			registerListeners(client);
-						
-			client.getSession().connect();
-			
-			while(client.getSession().isConnected())
+			for(int i = 0; i < amplifier; i++)
 			{
-				Scanner sc = new Scanner(System.in);
+				client.getSession().send(new ClientChatPacket(line));
 				
-				System.out.print(Hydrazine.inputPrefix);
-				
-				String line = sc.nextLine();
-				
-				if(line.contains("%%"))
+				try 
 				{
-					int index = line.indexOf("%");
-					String buf = line.substring(index, index + 3);
-					
-					String s = buf.replaceAll("%%", "");
-					
-					line = line.replaceAll(buf, "");
-					
-					try
-					{
-						amplifier = Integer.parseInt(s);
-					}
-					catch(Exception e)
-					{
-						// Ignore
-						
-						continue;
-					}
-				}
-				
-				for(int i = 0; i < amplifier; i++)
+					Thread.sleep(Integer.parseInt(properties.getProperty("amplDelay")));
+				} 
+				catch (InterruptedException e)
 				{
-					client.getSession().send(new ClientChatPacket(line));
-					
-					try 
-					{
-						Thread.sleep(Integer.parseInt(properties.getProperty("amplDelay")));
-					} 
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
+					e.printStackTrace();
 				}
 			}
 		}
