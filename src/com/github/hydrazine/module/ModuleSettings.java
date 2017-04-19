@@ -52,7 +52,7 @@ public class ModuleSettings extends Properties
 	 */
 	public boolean createConfigFile()
 	{		
-		if(configFile.exists())
+		if(!configFile.exists())
 		{
 			try 
 			{

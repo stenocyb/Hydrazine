@@ -20,6 +20,7 @@ import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
+import com.github.hydrazine.module.builtin.CrackedFloodModule;
 import com.github.hydrazine.util.Settings;
 
 /**
@@ -352,6 +353,9 @@ public class Hydrazine
 		
 		ChatModule chatM = new ChatModule();
 		loadedModules.add(chatM);
+		
+		CrackedFloodModule crackedFloodM = new CrackedFloodModule();
+		loadedModules.add(crackedFloodM);
 	}
 
 }
