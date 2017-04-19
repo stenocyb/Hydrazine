@@ -1,11 +1,7 @@
 package com.github.hydrazine.module.builtin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.Proxy;
-import java.util.Properties;
 import java.util.Scanner;
 
 import org.spacehq.mc.protocol.MinecraftProtocol;
@@ -23,7 +19,7 @@ import com.github.hydrazine.minecraft.ClientFactory;
 import com.github.hydrazine.minecraft.Credentials;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
-import com.github.hydrazine.module.ModuleHelper;
+import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
 
 /**
@@ -35,11 +31,11 @@ import com.github.hydrazine.util.ConnectionHelper;
  */
 public class ChatReaderModule implements Module
 {
-	// Configuration settings are stored in here
-	private Properties properties = new Properties();
-	
 	// Create new file where the configuration will be stored (Same folder as jar file)
 	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
+	
+	// Configuration settings are stored in here	
+    private ModuleSettings settings = new ModuleSettings(configFile);
 	
 	// Configuration variables
 	private String loginCommand;
@@ -62,7 +58,8 @@ public class ChatReaderModule implements Module
 	@Override
 	public void start() 
 	{
-		loadProperties();
+		// Load settings
+		settings.load();
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
@@ -154,15 +151,13 @@ public class ChatReaderModule implements Module
 
 	@Override
 	public void configure() 
-	{
-		ModuleHelper mh = new ModuleHelper();
-		
-		registerCommand = mh.askUser("Enter register command: ");
-		loginCommand = mh.askUser("Enter login command: ");
+	{		
+		registerCommand = ModuleSettings.askUser("Enter register command: ");
+		loginCommand = ModuleSettings.askUser("Enter login command: ");
 		
 		try
 		{
-			commandDelay = Integer.parseInt(mh.askUser("Enter the delay between the commands in milliseconds: "));
+			commandDelay = Integer.parseInt(ModuleSettings.askUser("Enter the delay between the commands in milliseconds: "));
 		}
 		catch(Exception e)
 		{
@@ -171,41 +166,26 @@ public class ChatReaderModule implements Module
 			return;
 		}
 		
-		filterColorCodes = mh.askUserYesNo("Filter color codes?");
+		filterColorCodes = ModuleSettings.askUserYesNo("Filter color codes?");
 		
-		properties.setProperty("registerCommand", registerCommand);
-		properties.setProperty("loginCommand", loginCommand);
-		properties.setProperty("commandDelay", String.valueOf(commandDelay));
-		properties.setProperty("filterColorCodes", String.valueOf(filterColorCodes));
+		settings.setProperty("registerCommand", registerCommand);
+		settings.setProperty("loginCommand", loginCommand);
+		settings.setProperty("commandDelay", String.valueOf(commandDelay));
+		settings.setProperty("filterColorCodes", String.valueOf(filterColorCodes));
 		
 		// Create configuration file if not existing
 		if(!configFile.exists())
 		{
-			try 
+			boolean success = settings.createConfigFile();
+			
+			if(!success)
 			{
-				configFile.createNewFile();
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-				
-				System.out.println(Hydrazine.errorPrefix + "Unable to create configuration file");
-				
 				return;
 			}
 		}
 		
 		// Store configuration variables
-		try 
-		{
-			properties.store(new FileOutputStream(configFile), null);
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			
-			System.out.println(Hydrazine.errorPrefix + "Unable to store configurations");
-		}
+		settings.store();
 	}
 	
 	/*
@@ -220,31 +200,31 @@ public class ChatReaderModule implements Module
             {
                 if(event.getPacket() instanceof ServerJoinGamePacket) 
                 {
-                    if(!(properties.getProperty("loginCommand").isEmpty() && properties.getProperty("registerCommand").isEmpty()))
+                    if(!(settings.getProperty("loginCommand").isEmpty() && settings.getProperty("registerCommand").isEmpty()))
                     {
                     	// Sleep because there may be a command cooldown
                     	try 
                     	{
-							Thread.sleep(Integer.parseInt(properties.getProperty("commandDelay")));
+							Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
 						} 
                     	catch (InterruptedException e) 
                     	{
                     		e.printStackTrace();
 						}
                     	
-                    	client.getSession().send(new ClientChatPacket(properties.getProperty("registerCommand")));
+                    	client.getSession().send(new ClientChatPacket(settings.getProperty("registerCommand")));
                     	
                     	// Sleep because there may be a command cooldown
                     	try 
                     	{
-							Thread.sleep(Integer.parseInt(properties.getProperty("commandDelay")));
+							Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
 						} 
                     	catch (InterruptedException e) 
                     	{
                     		e.printStackTrace();
 						}
                     	
-                    	client.getSession().send(new ClientChatPacket(properties.getProperty("loginCommand")));
+                    	client.getSession().send(new ClientChatPacket(settings.getProperty("loginCommand")));
                     }                    
                 }
                 else if(event.getPacket() instanceof ServerChatPacket)
@@ -254,7 +234,7 @@ public class ChatReaderModule implements Module
                 	// Check if message is a chat message
                 	if(packet.getType() != MessageType.NOTIFICATION)
                 	{                 		
-	                	if(properties.getProperty("filterColorCodes").equals("true"))
+	                	if(settings.getProperty("filterColorCodes").equals("true"))
 	                	{
 	                		String line = packet.getMessage().getFullText();
 	                			                		
@@ -295,25 +275,4 @@ public class ChatReaderModule implements Module
             }
         });
 	}
-	
-	/*
-	 * Load properties from file 
-	 */
-	private void loadProperties() 
-	{
-		if(configFile.exists())
-		{
-			try 
-			{
-				properties.load(new FileInputStream(configFile));
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-				
-				System.out.println(Hydrazine.errorPrefix + "Unable to load properties from file");
-			}
-		}
-	}
-
 }
