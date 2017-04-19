@@ -93,7 +93,7 @@ public class ChatReaderModule implements Module
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
 		{
-			Credentials creds = auth.getCredentials();
+		    Credentials creds = auth.getCredentials();
 			Client client = null;
 			
 			// Check if auth proxy should be used
