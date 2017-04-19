@@ -1,11 +1,7 @@
 package com.github.hydrazine.module.builtin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.Proxy;
-import java.util.Properties;
 import java.util.Scanner;
 
 import org.spacehq.mc.protocol.MinecraftProtocol;
@@ -17,7 +13,7 @@ import com.github.hydrazine.minecraft.ClientFactory;
 import com.github.hydrazine.minecraft.Credentials;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
-import com.github.hydrazine.module.ModuleHelper;
+import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
 
 /**
@@ -28,13 +24,12 @@ import com.github.hydrazine.util.ConnectionHelper;
  *
  */
 public class ChatModule implements Module
-{
-
-	// Configuration settings are stored in here
-	private Properties properties = new Properties();
-	
+{	
 	// Create new file where the configuration will be stored (Same folder as jar file)
 	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
+	
+	// Configuration settings are stored in here
+	private ModuleSettings settings = new ModuleSettings(configFile);
 	
 	// Configuration variables
 	private int amplifier = 1;
@@ -55,9 +50,10 @@ public class ChatModule implements Module
 	@Override
 	public void start()
 	{
-		loadProperties();
+		// Load settings
+		settings.load();
 		
-		amplifier = Integer.parseInt(properties.getProperty("amplifier"));
+		amplifier = Integer.parseInt(settings.getProperty("amplifier"));
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 
@@ -131,13 +127,11 @@ public class ChatModule implements Module
 
 	@Override
 	public void configure() 
-	{
-		ModuleHelper mh = new ModuleHelper();
-		
+	{		
 		try
 		{
-			amplifier = Integer.parseInt(mh.askUser("How many times should each message be sent?"));
-			amplDelay = Integer.parseInt(mh.askUser("Delay between amplified messages: "));
+			amplifier = Integer.parseInt(ModuleSettings.askUser("How many times should each message be sent?"));
+			amplDelay = Integer.parseInt(ModuleSettings.askUser("Delay between amplified messages: "));
 		}
 		catch(Exception e)
 		{
@@ -146,44 +140,29 @@ public class ChatModule implements Module
 			return;
 		}
 		
-		properties.setProperty("amplifier", String.valueOf(amplifier));
-		properties.setProperty("amplDelay", String.valueOf(amplDelay));
+		settings.setProperty("amplifier", String.valueOf(amplifier));
+		settings.setProperty("amplDelay", String.valueOf(amplDelay));
 		
 		// Create configuration file if not existing
 		if(!configFile.exists())
 		{
-			try 
+			boolean success = settings.createConfigFile();
+			
+			if(!success)
 			{
-				configFile.createNewFile();
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-				
-				System.out.println(Hydrazine.errorPrefix + "Unable to create configuration file");
-				
 				return;
 			}
 		}
 		
 		// Store configuration variables
-		try 
-		{
-			properties.store(new FileOutputStream(configFile), null);
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			
-			System.out.println(Hydrazine.errorPrefix + "Unable to store configurations");
-		}
+		settings.store();
 	}
 	
 	/*
 	 * Does all the input and chatting
 	 */
 	private void doStuff(Client client, Scanner sc)
-	{	
+	{			
 		System.out.print(Hydrazine.inputPrefix);
 		
 		String line = sc.nextLine();
@@ -223,7 +202,7 @@ public class ChatModule implements Module
 				
 				try 
 				{
-					Thread.sleep(Integer.parseInt(properties.getProperty("amplDelay")));
+					Thread.sleep(Integer.parseInt(settings.getProperty("amplDelay")));
 				} 
 				catch (InterruptedException e)
 				{
@@ -239,32 +218,12 @@ public class ChatModule implements Module
 				
 				try 
 				{
-					Thread.sleep(Integer.parseInt(properties.getProperty("amplDelay")));
+					Thread.sleep(Integer.parseInt(settings.getProperty("amplDelay")));
 				} 
 				catch (InterruptedException e)
 				{
 					e.printStackTrace();
 				}
-			}
-		}
-	}
-	
-	/*
-	 * Load properties from file 
-	 */
-	private void loadProperties() 
-	{
-		if(configFile.exists())
-		{
-			try 
-			{
-				properties.load(new FileInputStream(configFile));
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-				
-				System.out.println(Hydrazine.errorPrefix + "Unable to load properties from file");
 			}
 		}
 	}

@@ -14,8 +14,8 @@ import org.apache.commons.cli.ParseException;
 
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
-import com.github.hydrazine.module.ModuleHelper;
 import com.github.hydrazine.module.ModuleManager;
+import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.module.builtin.ChatModule;
@@ -147,10 +147,7 @@ public class Hydrazine
 		
 		settings.setSetting("host", server.getHost());
 		settings.setSetting("port", String.valueOf(server.getPort()));
-		
-		// Module Helper
-		ModuleHelper mc = new ModuleHelper();
-		
+				
 		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Start internal module
@@ -166,7 +163,7 @@ public class Hydrazine
 					{
 						m.configure();
 						
-						boolean answer = mc.askUserYesNo("Start module \'" + m.getName() + "\'?");
+						boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getName() + "\'?");
 						
 						if(answer)
 						{							
@@ -208,7 +205,7 @@ public class Hydrazine
 				{
 					m.configure();
 					
-					boolean answer = mc.askUserYesNo("Start module \'" + m.getName() + "\'?");
+					boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getName() + "\'?");
 					
 					if(answer)
 					{
@@ -220,9 +217,7 @@ public class Hydrazine
 					m.start();
 				}
 			}
-		}
-		
-		// TODO End of main method, something left to do?
+		}		
 	}
 	
 	/*
