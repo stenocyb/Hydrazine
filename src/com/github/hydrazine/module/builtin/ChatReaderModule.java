@@ -37,12 +37,6 @@ public class ChatReaderModule implements Module
 	// Configuration settings are stored in here	
     private ModuleSettings settings = new ModuleSettings(configFile);
 	
-	// Configuration variables
-	private String loginCommand;
-	private String registerCommand;
-	private int commandDelay = 1000;
-	private boolean filterColorCodes = true;
-	
 	@Override
 	public String getName() 
 	{
@@ -151,27 +145,11 @@ public class ChatReaderModule implements Module
 
 	@Override
 	public void configure() 
-	{		
-		registerCommand = ModuleSettings.askUser("Enter register command: ");
-		loginCommand = ModuleSettings.askUser("Enter login command: ");
-		
-		try
-		{
-			commandDelay = Integer.parseInt(ModuleSettings.askUser("Enter the delay between the commands in milliseconds: "));
-		}
-		catch(Exception e)
-		{
-			System.out.println(Hydrazine.errorPrefix + "Invalid command delay.");
-			
-			return;
-		}
-		
-		filterColorCodes = ModuleSettings.askUserYesNo("Filter color codes?");
-		
-		settings.setProperty("registerCommand", registerCommand);
-		settings.setProperty("loginCommand", loginCommand);
-		settings.setProperty("commandDelay", String.valueOf(commandDelay));
-		settings.setProperty("filterColorCodes", String.valueOf(filterColorCodes));
+	{				
+		settings.setProperty("registerCommand", ModuleSettings.askUser("Enter register command: "));
+		settings.setProperty("loginCommand", ModuleSettings.askUser("Enter login command: "));
+		settings.setProperty("commandDelay", ModuleSettings.askUser("Enter the delay between the commands in milliseconds: "));
+		settings.setProperty("filterColorCodes", String.valueOf(ModuleSettings.askUserYesNo("Filter color codes?")));
 		
 		// Create configuration file if not existing
 		if(!configFile.exists())
@@ -200,31 +178,34 @@ public class ChatReaderModule implements Module
             {
                 if(event.getPacket() instanceof ServerJoinGamePacket) 
                 {
-                    if(!(settings.getProperty("loginCommand").isEmpty() && settings.getProperty("registerCommand").isEmpty()))
+                    if(settings.containsKey("loginCommand") && settings.containsKey("registerCommand"))
                     {
-                    	// Sleep because there may be a command cooldown
-                    	try 
-                    	{
-							Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
-						} 
-                    	catch (InterruptedException e) 
-                    	{
-                    		e.printStackTrace();
-						}
-                    	
-                    	client.getSession().send(new ClientChatPacket(settings.getProperty("registerCommand")));
-                    	
-                    	// Sleep because there may be a command cooldown
-                    	try 
-                    	{
-							Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
-						} 
-                    	catch (InterruptedException e) 
-                    	{
-                    		e.printStackTrace();
-						}
-                    	
-                    	client.getSession().send(new ClientChatPacket(settings.getProperty("loginCommand")));
+                    	if(!(settings.getProperty("loginCommand").isEmpty() && settings.getProperty("registerCommand").isEmpty()))
+                        {
+	                    	// Sleep because there may be a command cooldown
+	                    	try 
+	                    	{
+								Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
+							} 
+	                    	catch (InterruptedException e) 
+	                    	{
+	                    		e.printStackTrace();
+							}
+	                    	
+	                    	client.getSession().send(new ClientChatPacket(settings.getProperty("registerCommand")));
+	                    	
+	                    	// Sleep because there may be a command cooldown
+	                    	try 
+	                    	{
+								Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
+							} 
+	                    	catch (InterruptedException e) 
+	                    	{
+	                    		e.printStackTrace();
+							}
+	                    	
+	                    	client.getSession().send(new ClientChatPacket(settings.getProperty("loginCommand")));
+                        }
                     }                    
                 }
                 else if(event.getPacket() instanceof ServerChatPacket)
@@ -233,8 +214,8 @@ public class ChatReaderModule implements Module
                 	
                 	// Check if message is a chat message
                 	if(packet.getType() != MessageType.NOTIFICATION)
-                	{                 		
-	                	if(settings.getProperty("filterColorCodes").equals("true"))
+                	{            		
+	                	if(settings.containsKey("filterColorCodes") && settings.getProperty("filterColorCodes").equals("true"))
 	                	{
 	                		String line = packet.getMessage().getFullText();
 	                			                		

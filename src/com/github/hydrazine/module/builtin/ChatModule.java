@@ -31,10 +31,6 @@ public class ChatModule implements Module
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
 	
-	// Configuration variables
-	private int amplifier = 1;
-	private int amplDelay = 500;
-	
 	@Override
 	public String getName() 
 	{
@@ -52,8 +48,6 @@ public class ChatModule implements Module
 	{
 		// Load settings
 		settings.load();
-		
-		amplifier = Integer.parseInt(settings.getProperty("amplifier"));
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 
@@ -128,20 +122,8 @@ public class ChatModule implements Module
 	@Override
 	public void configure() 
 	{		
-		try
-		{
-			amplifier = Integer.parseInt(ModuleSettings.askUser("How many times should each message be sent?"));
-			amplDelay = Integer.parseInt(ModuleSettings.askUser("Delay between amplified messages: "));
-		}
-		catch(Exception e)
-		{
-			System.out.println(Hydrazine.errorPrefix + "Invalid value.");
-			
-			return;
-		}
-		
-		settings.setProperty("amplifier", String.valueOf(amplifier));
-		settings.setProperty("amplDelay", String.valueOf(amplDelay));
+		settings.setProperty("amplifier", ModuleSettings.askUser("How many times should each message be sent?"));
+		settings.setProperty("amplDelay", ModuleSettings.askUser("Delay between amplified messages: "));
 		
 		// Create configuration file if not existing
 		if(!configFile.exists())
@@ -164,6 +146,19 @@ public class ChatModule implements Module
 	private void doStuff(Client client, Scanner sc)
 	{			
 		System.out.print(Hydrazine.inputPrefix);
+		
+		int amplifier = 1;
+		int amplDelay = 1000;
+		
+		try
+		{
+			amplifier = Integer.parseInt(settings.getProperty("amplifier"));
+			amplDelay = Integer.parseInt(settings.getProperty("amplDelay"));
+		}
+		catch(Exception e)
+		{
+			System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+		}
 		
 		String line = sc.nextLine();
 		
@@ -202,7 +197,7 @@ public class ChatModule implements Module
 				
 				try 
 				{
-					Thread.sleep(Integer.parseInt(settings.getProperty("amplDelay")));
+					Thread.sleep(amplDelay);
 				} 
 				catch (InterruptedException e)
 				{
@@ -218,7 +213,7 @@ public class ChatModule implements Module
 				
 				try 
 				{
-					Thread.sleep(Integer.parseInt(settings.getProperty("amplDelay")));
+					Thread.sleep(amplDelay);
 				} 
 				catch (InterruptedException e)
 				{
