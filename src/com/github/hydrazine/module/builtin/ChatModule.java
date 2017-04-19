@@ -18,7 +18,6 @@ import com.github.hydrazine.minecraft.Credentials;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleHelper;
-import com.github.hydrazine.util.AuthType;
 import com.github.hydrazine.util.ConnectionHelper;
 
 /**
@@ -71,7 +70,7 @@ public class ChatModule implements Module
 		// Server has offline mode enabled
 		if(Hydrazine.settings.hasSetting("username") || Hydrazine.settings.hasSetting("genuser"))
 		{
-			String username = AuthType.CRACKED.getUsername();
+			String username = auth.getUsername();
 			
 			MinecraftProtocol protocol = new MinecraftProtocol(username);
 			
@@ -89,13 +88,13 @@ public class ChatModule implements Module
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
 		{
-			Credentials creds = AuthType.CREDENTIALS.getCredentials();
+			Credentials creds = auth.getCredentials();
 			Client client = null;
 			
 			// Check if auth proxy should be used
 			if(Hydrazine.settings.hasSetting("authproxy"))
 			{
-				Proxy proxy = AuthType.CREDENTIALS.getAuthProxy();
+				Proxy proxy = auth.getAuthProxy();
 				
 				MinecraftProtocol protocol = auth.authenticate(creds, proxy);
 				
