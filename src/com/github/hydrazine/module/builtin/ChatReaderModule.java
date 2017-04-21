@@ -180,32 +180,32 @@ public class ChatReaderModule implements Module
 				{
 					if(settings.containsKey("loginCommand") && settings.containsKey("registerCommand"))
 					{
-				    	if(!(settings.getProperty("loginCommand").isEmpty() && settings.getProperty("registerCommand").isEmpty()))
-				        {
-				        	// Sleep because there may be a command cooldown
-				    		try 
-				        	{
+						if(!(settings.getProperty("loginCommand").isEmpty() && settings.getProperty("registerCommand").isEmpty()))
+						{
+							// Sleep because there may be a command cooldown
+							try 
+							{
 								Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
 							} 
-				        	catch (InterruptedException e) 
-				        	{
-				        		e.printStackTrace();
+							catch (InterruptedException e) 
+							{
+								e.printStackTrace();
 							}
-				        	
-				        	client.getSession().send(new ClientChatPacket(settings.getProperty("registerCommand")));
-				        	
-				        	// Sleep because there may be a command cooldown
-				        	try 
-				        	{
+							
+							client.getSession().send(new ClientChatPacket(settings.getProperty("registerCommand")));
+							
+							// Sleep because there may be a command cooldown
+							try 
+							{
 								Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
 							} 
-				        	catch (InterruptedException e) 
-				        	{
-				        		e.printStackTrace();
+							catch (InterruptedException e) 
+							{
+								e.printStackTrace();
 							}
-				        	
-				        	client.getSession().send(new ClientChatPacket(settings.getProperty("loginCommand")));
-				        }
+							
+							client.getSession().send(new ClientChatPacket(settings.getProperty("loginCommand")));
+						}
 				    }                    
 				}
 				else if(event.getPacket() instanceof ServerChatPacket)
@@ -253,7 +253,7 @@ public class ChatReaderModule implements Module
 						}
 					}
 				}
-		    }
+			}
 		});
 	}
 }
