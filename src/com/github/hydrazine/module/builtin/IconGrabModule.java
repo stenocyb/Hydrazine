@@ -35,7 +35,7 @@ public class IconGrabModule implements Module
 	@Override
 	public String getName() 
 	{
-		return "Icon";
+		return "icongrab";
 	}
 
 	@Override

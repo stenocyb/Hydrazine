@@ -30,7 +30,7 @@ public class InfoModule implements Module
 	@Override
 	public String getName() 
 	{
-		return "Info";
+		return "info";
 	}
 
 	@Override
