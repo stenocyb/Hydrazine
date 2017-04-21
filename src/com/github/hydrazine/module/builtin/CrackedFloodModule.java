@@ -62,14 +62,22 @@ public class CrackedFloodModule implements Module
 		int bots = 5;
 		int delay = 1000;
 		
-		try
+		if(configFile.exists())
 		{
-			bots = Integer.parseInt(settings.getProperty("bots"));
-			delay = Integer.parseInt(settings.getProperty("delay"));
+			try
+			{
+				bots = Integer.parseInt(settings.getProperty("bots"));
+				delay = Integer.parseInt(settings.getProperty("delay"));
+			}
+			catch(Exception e)
+			{
+				System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+			}
 		}
-		catch(Exception e)
+		else
 		{
-			System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+			System.out.println(Hydrazine.warnPrefix + "This module hasn't been configured yet. Append the switch \'-c\' to the command to do so.");
+			System.out.println(Hydrazine.warnPrefix + "Using default configuration. (5 bots; 1000ms delay)");
 		}
 		
 		// Server has offline mode enabled
@@ -173,11 +181,12 @@ public class CrackedFloodModule implements Module
 		
 		if(settings.getProperty("sendMessageOnJoin").equals("true"))
 		{
-			settings.setProperty("joinMessage", ModuleSettings.askUser("Message:"));
+			settings.setProperty("messageDelay", ModuleSettings.askUser("Time to wait before sending message:"));
+			settings.setProperty("messageJoin", ModuleSettings.askUser("Message:"));
 		}
 		else
 		{
-			settings.setProperty("joinMessage", "");
+			settings.setProperty("messageJoin", "");
 		}
 		
 		// Create configuration file if not existing
@@ -207,11 +216,36 @@ public class CrackedFloodModule implements Module
             {
                 if(event.getPacket() instanceof ServerJoinGamePacket) 
                 {
-                    if(settings.containsKey("sendMessageOnJoin") && settings.containsKey("joinMessage"))
+                    if(settings.containsKey("sendMessageOnJoin") && settings.containsKey("messageJoin"))
                     {
-                    	if(!(settings.getProperty("joinMessage").isEmpty()))
+                    	if(!(settings.getProperty("messageJoin").isEmpty()))
                         {
-	                    	client.getSession().send(new ClientChatPacket(settings.getProperty("joinMessage")));
+                    		int delay = 1000;
+                    		
+                    		if(configFile.exists())
+                    		{
+	                    		try
+	                    		{
+	                    			delay = Integer.parseInt(settings.getProperty("messageDelay"));
+	                    		}
+	                    		catch(Exception e)
+	                    		{
+	                    			System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+	                    		}
+                    		}
+                    		
+                    		try 
+                    		{
+								Thread.sleep(delay);
+							} 
+                    		catch (InterruptedException e) 
+                    		{
+								// Client got disconnected or smth else, do not print error
+                    			
+                    			return;
+							}
+                    		
+	                    	client.getSession().send(new ClientChatPacket(settings.getProperty("messageJoin")));
                         }
                     }                    
                 }

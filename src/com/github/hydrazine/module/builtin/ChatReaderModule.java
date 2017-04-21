@@ -173,87 +173,87 @@ public class ChatReaderModule implements Module
 	{
 		client.getSession().addListener(new SessionAdapter() 
 		{
-            @Override
-            public void packetReceived(PacketReceivedEvent event) 
-            {
-                if(event.getPacket() instanceof ServerJoinGamePacket) 
-                {
-                    if(settings.containsKey("loginCommand") && settings.containsKey("registerCommand"))
-                    {
-                    	if(!(settings.getProperty("loginCommand").isEmpty() && settings.getProperty("registerCommand").isEmpty()))
-                        {
-	                    	// Sleep because there may be a command cooldown
-	                    	try 
-	                    	{
+			@Override
+			public void packetReceived(PacketReceivedEvent event) 
+			{
+				if(event.getPacket() instanceof ServerJoinGamePacket) 
+				{
+					if(settings.containsKey("loginCommand") && settings.containsKey("registerCommand"))
+					{
+				    	if(!(settings.getProperty("loginCommand").isEmpty() && settings.getProperty("registerCommand").isEmpty()))
+				        {
+				        	// Sleep because there may be a command cooldown
+				    		try 
+				        	{
 								Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
 							} 
-	                    	catch (InterruptedException e) 
-	                    	{
-	                    		e.printStackTrace();
+				        	catch (InterruptedException e) 
+				        	{
+				        		e.printStackTrace();
 							}
-	                    	
-	                    	client.getSession().send(new ClientChatPacket(settings.getProperty("registerCommand")));
-	                    	
-	                    	// Sleep because there may be a command cooldown
-	                    	try 
-	                    	{
+				        	
+				        	client.getSession().send(new ClientChatPacket(settings.getProperty("registerCommand")));
+				        	
+				        	// Sleep because there may be a command cooldown
+				        	try 
+				        	{
 								Thread.sleep(Integer.parseInt(settings.getProperty("commandDelay")));
 							} 
-	                    	catch (InterruptedException e) 
-	                    	{
-	                    		e.printStackTrace();
+				        	catch (InterruptedException e) 
+				        	{
+				        		e.printStackTrace();
 							}
-	                    	
-	                    	client.getSession().send(new ClientChatPacket(settings.getProperty("loginCommand")));
-                        }
-                    }                    
-                }
-                else if(event.getPacket() instanceof ServerChatPacket)
-                {
-                	ServerChatPacket packet = ((ServerChatPacket) event.getPacket());
-                	
-                	// Check if message is a chat message
-                	if(packet.getType() != MessageType.NOTIFICATION)
-                	{            		
-	                	if(settings.containsKey("filterColorCodes") && settings.getProperty("filterColorCodes").equals("true"))
-	                	{
-	                		String line = packet.getMessage().getFullText();
-	                			                		
-	                		String builder = line;
-	                			                		       
-	                		// Filter out color codes
-	                		if(builder.contains("§"))
-	                		{
-	                			int count = builder.length() - builder.replace("§", "").length();
-	                			
-	                			for(int i = 0; i < count; i++)
-	                			{
-	                				int index = builder.indexOf("§");
-	                				
-	                				if(index > (-1)) // Check if index is invalid, happens sometimes.
-	                				{		
-			            				String buf = builder.substring(index, index + 2);
-			            				
-			            				String repl = builder.replace(buf, "");
-			            				                				
-			            				builder = repl;
-	                				}
-	                			}
-	                			
-	                			System.out.println(Hydrazine.inputPrefix + builder);
-	                		}
-	                		else
-	                		{
-	                			System.out.println(Hydrazine.inputPrefix + line);
-	                		}
-	                	}
-	                	else
-	                	{
-	                		System.out.println(Hydrazine.inputPrefix + packet.getMessage().getFullText());
-	                	}
-                	}
-                }
-            }
-        });
+				        	
+				        	client.getSession().send(new ClientChatPacket(settings.getProperty("loginCommand")));
+				        }
+				    }                    
+				}
+				else if(event.getPacket() instanceof ServerChatPacket)
+				{
+					ServerChatPacket packet = ((ServerChatPacket) event.getPacket());
+					
+					// Check if message is a chat message
+					if(packet.getType() != MessageType.NOTIFICATION)
+					{            		
+				    	if(settings.containsKey("filterColorCodes") && settings.getProperty("filterColorCodes").equals("true"))
+				    	{
+				    		String line = packet.getMessage().getFullText();
+				    			                		
+				    		String builder = line;
+				    			                		       
+				    		// Filter out color codes
+				    		if(builder.contains("§"))
+				    		{
+				    			int count = builder.length() - builder.replace("§", "").length();
+				    			
+				    			for(int i = 0; i < count; i++)
+				    			{
+				    				int index = builder.indexOf("§");
+				    				
+				    				if(index > (-1)) // Check if index is invalid, happens sometimes.
+				    				{		
+				        				String buf = builder.substring(index, index + 2);
+				        				
+				        				String repl = builder.replace(buf, "");
+				        				                				
+				        				builder = repl;
+				    				}
+				    			}
+				    			
+				    			System.out.println(Hydrazine.inputPrefix + builder);
+				    		}
+				    		else
+				    		{
+				    			System.out.println(Hydrazine.inputPrefix + line);
+				    		}
+				    	}
+				    	else
+				    	{
+				    		System.out.println(Hydrazine.inputPrefix + packet.getMessage().getFullText());
+				    	}
+					}
+				}
+		    }
+		});
 	}
 }
