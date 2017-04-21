@@ -18,6 +18,7 @@ import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
+import com.github.hydrazine.module.builtin.PremiumFloodModule;
 import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
 import com.github.hydrazine.module.builtin.CrackedFloodModule;
@@ -356,6 +357,9 @@ public class Hydrazine
 		
 		CrackedFloodModule crackedFloodM = new CrackedFloodModule();
 		loadedModules.add(crackedFloodM);
+		
+		PremiumFloodModule premiumFloodM = new PremiumFloodModule();
+		loadedModules.add(premiumFloodM);
 	}
 
 }

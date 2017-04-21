@@ -67,16 +67,6 @@ public class Authenticator
 	}
 	
 	/**
-	 * Used for cracked servers
-	 * @param username A minecraft username
-	 * @return A MinecraftProtocol which can be used to create a client object
-	 */
-	public MinecraftProtocol authenticate(String username)
-	{
-		return new MinecraftProtocol(username);
-	}
-	
-	/**
 	 * @return The auth proxy specified by the user
 	 */
 	public Proxy getAuthProxy()

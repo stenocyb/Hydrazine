@@ -28,7 +28,6 @@ import com.github.hydrazine.util.FileFactory;
  */
 public class CrackedFloodModule implements Module
 {
-	
 	// Create new file where the configuration will be stored (Same folder as jar file)
 	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
 	
@@ -111,6 +110,19 @@ public class CrackedFloodModule implements Module
 						e.printStackTrace();
 					}
 				}
+				
+				// Do nothing, clients stay connected until program shuts down
+				while(true)
+				{
+					try 
+					{
+						Thread.sleep(20);
+					} 
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		// Load usernames from file
@@ -123,6 +135,13 @@ public class CrackedFloodModule implements Module
 				for(int i = 0; i < bots; i++)
 				{
 					String[] usernames = ff.getUsernames();
+					
+					if(usernames.length == 0)
+					{
+						System.out.println(Hydrazine.errorPrefix + "No usernames contained in file.");
+						
+						return;
+					}
 					
 					Random r = new Random();
 					
@@ -139,6 +158,19 @@ public class CrackedFloodModule implements Module
 						Thread.sleep(delay);
 					} 
 					catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+				
+				// Do nothing, clients stay connected until program shuts down
+				while(true)
+				{
+					try 
+					{
+						Thread.sleep(20);
+					} 
+					catch (InterruptedException e)
 					{
 						e.printStackTrace();
 					}
@@ -243,7 +275,7 @@ public class CrackedFloodModule implements Module
 			        			// Client got disconnected or smth else, do not print error
 			        			
 			        			return;
-							}
+			        		}
 			        		
 			        		client.getSession().send(new ClientChatPacket(settings.getProperty("messageJoin")));
 			            }
