@@ -94,7 +94,7 @@ public class Hydrazine
 		{
 			System.out.println(Hydrazine.errorPrefix + "Missing host (-h) or missing module (-m) or invalid option passed.\n");
 			// Print help when invalid syntax
-			formatter.printHelp(100, "hydrazine [Options] -h SERVER", "\nOPTIONS:", options, "\nEXAMPLE:\n hydrazine -h www.example.com -p 30000 -m info -u username123");
+			formatter.printHelp(100, "hydrazine [Options] -h SERVER -m MODULE", "\nOPTIONS:", options, "\nEXAMPLE:\njava -jar Hydrazine.jar -h www.example.com -p 30000 -m chat -u username123");
 			
 			System.exit(0);
 		}

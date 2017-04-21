@@ -35,7 +35,7 @@ public class ChatReaderModule implements Module
 	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
 	
 	// Configuration settings are stored in here	
-    private ModuleSettings settings = new ModuleSettings(configFile);
+	private ModuleSettings settings = new ModuleSettings(configFile);
 	
 	@Override
 	public String getName() 
@@ -215,42 +215,42 @@ public class ChatReaderModule implements Module
 					// Check if message is a chat message
 					if(packet.getType() != MessageType.NOTIFICATION)
 					{            		
-				    	if(settings.containsKey("filterColorCodes") && settings.getProperty("filterColorCodes").equals("true"))
-				    	{
-				    		String line = packet.getMessage().getFullText();
-				    			                		
-				    		String builder = line;
-				    			                		       
-				    		// Filter out color codes
-				    		if(builder.contains("§"))
-				    		{
-				    			int count = builder.length() - builder.replace("§", "").length();
-				    			
-				    			for(int i = 0; i < count; i++)
-				    			{
-				    				int index = builder.indexOf("§");
-				    				
-				    				if(index > (-1)) // Check if index is invalid, happens sometimes.
-				    				{		
-				        				String buf = builder.substring(index, index + 2);
-				        				
-				        				String repl = builder.replace(buf, "");
-				        				                				
-				        				builder = repl;
-				    				}
-				    			}
-				    			
-				    			System.out.println(Hydrazine.inputPrefix + builder);
-				    		}
-				    		else
-				    		{
-				    			System.out.println(Hydrazine.inputPrefix + line);
-				    		}
-				    	}
-				    	else
-				    	{
-				    		System.out.println(Hydrazine.inputPrefix + packet.getMessage().getFullText());
-				    	}
+						if(settings.containsKey("filterColorCodes") && settings.getProperty("filterColorCodes").equals("true"))
+						{
+							String line = packet.getMessage().getFullText();
+								                		
+							String builder = line;
+								                		       
+							// Filter out color codes
+							if(builder.contains("§"))
+							{
+								int count = builder.length() - builder.replace("§", "").length();
+								
+								for(int i = 0; i < count; i++)
+								{
+									int index = builder.indexOf("§");
+									
+									if(index > (-1)) // Check if index is invalid, happens sometimes.
+									{		
+										String buf = builder.substring(index, index + 2);
+										
+										String repl = builder.replace(buf, "");
+										                				
+										builder = repl;
+									}
+								}
+								
+								System.out.println(Hydrazine.inputPrefix + builder);
+							}
+							else
+							{
+								System.out.println(Hydrazine.inputPrefix + line);
+							}
+						}
+						else
+						{
+							System.out.println(Hydrazine.inputPrefix + packet.getMessage().getFullText());
+						}
 					}
 				}
 		    }
