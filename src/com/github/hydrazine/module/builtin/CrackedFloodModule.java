@@ -211,46 +211,45 @@ public class CrackedFloodModule implements Module
 	{
 		client.getSession().addListener(new SessionAdapter() 
 		{
-            @Override
-            public void packetReceived(PacketReceivedEvent event) 
-            {
-                if(event.getPacket() instanceof ServerJoinGamePacket) 
-                {
-                    if(settings.containsKey("sendMessageOnJoin") && settings.containsKey("messageJoin"))
-                    {
-                    	if(!(settings.getProperty("messageJoin").isEmpty()))
-                        {
-                    		int delay = 1000;
-                    		
-                    		if(configFile.exists())
-                    		{
-	                    		try
-	                    		{
-	                    			delay = Integer.parseInt(settings.getProperty("messageDelay"));
-	                    		}
-	                    		catch(Exception e)
-	                    		{
-	                    			System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
-	                    		}
-                    		}
-                    		
-                    		try 
-                    		{
-								Thread.sleep(delay);
+			@Override
+			public void packetReceived(PacketReceivedEvent event) 
+			{
+			    if(event.getPacket() instanceof ServerJoinGamePacket) 
+			    {
+			        if(settings.containsKey("sendMessageOnJoin") && settings.containsKey("messageJoin"))
+			        {
+			        	if(!(settings.getProperty("messageJoin").isEmpty()))
+			            {
+			        		int delay = 1000;
+			        		
+			        		if(configFile.exists())
+			        		{
+			            		try
+			            		{
+			            			delay = Integer.parseInt(settings.getProperty("messageDelay"));
+			            		}
+			            		catch(Exception e)
+			            		{
+			            			System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+			            		}
+			        		}
+			        		
+			        		try 
+			        		{
+			        			Thread.sleep(delay);
 							} 
-                    		catch (InterruptedException e) 
-                    		{
-								// Client got disconnected or smth else, do not print error
-                    			
-                    			return;
+			        		catch (InterruptedException e) 
+			        		{
+			        			// Client got disconnected or smth else, do not print error
+			        			
+			        			return;
 							}
-                    		
-	                    	client.getSession().send(new ClientChatPacket(settings.getProperty("messageJoin")));
-                        }
-                    }                    
-                }
-            }
-        });
+			        		
+			        		client.getSession().send(new ClientChatPacket(settings.getProperty("messageJoin")));
+			            }
+			        }
+			    }
+			}
+		});
 	}
-
 }
