@@ -23,7 +23,7 @@ import com.github.hydrazine.util.FileFactory;
 public class PremiumFloodModule implements Module
 {
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + getName() + ".conf");
 	
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
@@ -163,8 +163,8 @@ public class PremiumFloodModule implements Module
 		
 		if(settings.getProperty("sendMessageOnJoin").equals("true"))
 		{
-			settings.setProperty("messageDelay", ModuleSettings.askUser("Time to wait before sending message:"));
 			settings.setProperty("messageJoin", ModuleSettings.askUser("Message:"));
+			settings.setProperty("messageDelay", ModuleSettings.askUser("Time to wait before sending message:"));
 		}
 		else
 		{

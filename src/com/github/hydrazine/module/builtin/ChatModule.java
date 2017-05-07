@@ -26,7 +26,7 @@ import com.github.hydrazine.util.ConnectionHelper;
 public class ChatModule implements Module
 {	
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + getName() + ".conf");
 	
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
@@ -122,8 +122,7 @@ public class ChatModule implements Module
 	@Override
 	public void configure() 
 	{		
-		settings.setProperty("amplifier", ModuleSettings.askUser("How many times should each message be sent?"));
-		settings.setProperty("amplDelay", ModuleSettings.askUser("Delay between amplified messages: "));
+		settings.setProperty("sendDelay", ModuleSettings.askUser("Delay between sending messages: "));
 		
 		// Create configuration file if not existing
 		if(!configFile.exists())
@@ -147,78 +146,62 @@ public class ChatModule implements Module
 	{			
 		System.out.print(Hydrazine.inputPrefix);
 		
-		int amplifier = 1;
-		int amplDelay = 1000;
+		int sendDelay = 1000;
 		
-		try
+		if(configFile.exists())
 		{
-			amplifier = Integer.parseInt(settings.getProperty("amplifier"));
-			amplDelay = Integer.parseInt(settings.getProperty("amplDelay"));
-		}
-		catch(Exception e)
-		{
-			System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+			try
+			{
+				sendDelay = Integer.parseInt(settings.getProperty("sendDelay"));
+			}
+			catch(Exception e)
+			{
+				System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+			}
 		}
 		
 		String line = sc.nextLine();
 		
-		if(line.contains("%%"))
+		int sendTime = 1;
+		
+		if(line.contains("%"))
 		{
-			int sendTime = 1;
 			int index = line.indexOf("%");
-			
-			String buf = "";
-			
-			if(line.length() == index + 3)
-			{
-				buf = line.substring(index, index + 3);
-			}
-			else if(line.length() == index + 4)
-			{
-				buf = line.substring(index, index + 4);
-			}
-			
-			String s = buf.replaceAll("%%", "");
-			
-			line = line.replaceAll(buf, "");
-			
-			try
-			{
-				sendTime = Integer.parseInt(s);
-			}
-			catch(Exception e)
-			{				
-				sendTime = 1;
-			}
-			
-			for(int i = 0; i < sendTime; i++)
-			{
-				client.getSession().send(new ClientChatPacket(line));
+			String end = line.substring(index, line.length());			
+			String s = end.replaceFirst("%", "");
+						
+			if(s.contains("%"))
+			{								
+				int index2 = line.replaceFirst("%", "X").indexOf("%");
+								
+				String part = line.substring(index, index2);
+						
+				line = line.replaceAll(part + "%", "");
 				
-				try 
+				part = part.replaceAll("%", "");
+								
+				try
 				{
-					Thread.sleep(amplDelay);
-				} 
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
+					sendTime = Integer.parseInt(part);
 				}
+				catch(Exception e)
+				{
+					sendTime = 1;
+				}				
 			}
 		}
-		else
+		
+		for(int i = 0; i < sendTime; i++)
 		{
-			for(int i = 0; i < amplifier; i++)
+			client.getSession().send(new ClientChatPacket(line));
+			
+			try 
 			{
-				client.getSession().send(new ClientChatPacket(line));
-				
-				try 
-				{
-					Thread.sleep(amplDelay);
-				} 
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
+				Thread.sleep(sendDelay);
+			} 
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}

@@ -32,7 +32,7 @@ import com.github.hydrazine.util.ConnectionHelper;
 public class ChatReaderModule implements Module
 {
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + this.getClass().getName());
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + getName() + ".conf");
 	
 	// Configuration settings are stored in here	
 	private ModuleSettings settings = new ModuleSettings(configFile);
