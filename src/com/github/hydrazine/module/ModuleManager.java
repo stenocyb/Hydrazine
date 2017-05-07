@@ -19,57 +19,10 @@ import com.github.hydrazine.Hydrazine;
  */
 public class ModuleManager 
 {
-	
-	private ArrayList<Module> activeModules = new ArrayList<Module>();
-	
+		
 	public ModuleManager()
 	{
 		
-	}
-	
-	/**
-	 * Starts a module
-	 * @param m the module
-	 */
-	public void start(Module m)
-	{
-		m.start();
-		
-		// Add module to the active modules list
-		if(!activeModules.contains(m))
-		{
-			activeModules.add(m);
-		}
-		
-		System.out.println(Hydrazine.infoPrefix + "Starting module " + m.getName().toUpperCase());
-	}
-	
-	/**
-	 * Stops a module
-	 * @param m the mpdule
-	 */
-	public void stop(Module m)
-	{
-		m.stop();
-		
-		// Remove module from the active modules list
-		if(activeModules.contains(m))
-		{
-			activeModules.remove(m);
-		}
-		
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + m.getName().toUpperCase());
-	}
-	
-	/**
-	 * Stops all active modules
-	 */
-	public void stopAll()
-	{
-		for(Module m : activeModules)
-		{
-			m.stop();
-		}
 	}
 	
 	/**

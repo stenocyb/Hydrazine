@@ -29,7 +29,7 @@ import com.github.hydrazine.util.FileFactory;
 public class CrackedFloodModule implements Module
 {
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "." + getName() + ".conf");
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getName() + ".conf");
 	
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
