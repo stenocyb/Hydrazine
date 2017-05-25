@@ -156,7 +156,7 @@ public class ChatModule implements Module
 			}
 			catch(Exception e)
 			{
-				System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");
+				System.out.println(Hydrazine.errorPrefix + "Invalid value in configuration file. Reconfigure the module.");				
 			}
 		}
 		

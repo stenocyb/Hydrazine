@@ -44,6 +44,8 @@ public class FileFactory
 		catch (FileNotFoundException e) 
 		{
 			System.out.println(Hydrazine.errorPrefix + file.getAbsolutePath() + " not found!");
+			
+			return null;
 		}
 		
 		while(s.hasNextLine())
@@ -70,7 +72,7 @@ public class FileFactory
 				}
 				catch(NumberFormatException e)
 				{
-					// System.out.println("Invalid format: " + line); - Just ignore
+					continue;
 				}
 			}
 			else
@@ -99,6 +101,8 @@ public class FileFactory
 		catch (FileNotFoundException e) 
 		{
 			System.out.println(Hydrazine.errorPrefix + file.getAbsolutePath() + " not found!");
+			
+			return null;
 		}
 		
 		while(s.hasNextLine())
@@ -119,7 +123,7 @@ public class FileFactory
 			}
 			else
 			{
-				// System.out.println("Invalid format: " + line);
+				continue;
 			}
 		}
 		
@@ -143,6 +147,8 @@ public class FileFactory
 		catch (FileNotFoundException e) 
 		{
 			System.out.println(Hydrazine.errorPrefix + file.getAbsolutePath() + " not found!");
+			
+			return null;
 		}
 		
 		while(s.hasNextLine())
@@ -155,7 +161,7 @@ public class FileFactory
 			}
 			else
 			{
-				// System.out.println("Invalid format: " + line);
+				continue;
 			}
 		}
 		
