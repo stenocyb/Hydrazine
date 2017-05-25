@@ -64,7 +64,9 @@ public class IconGrabModule implements Module
 			{
 				e.printStackTrace();
 				
-				System.out.println(Hydrazine.errorPrefix + "Invalid path, could not save icon.");
+				System.out.println(Hydrazine.errorPrefix + "Couldn't create output file.");
+				
+				return;
 			}
 		}
 		
@@ -99,6 +101,8 @@ public class IconGrabModule implements Module
             		e.printStackTrace();
             		
             		System.out.println(Hydrazine.errorPrefix + "Could not write to file.");
+            		
+            		return;
 				}
                 
                 hasRetrieved = true;
