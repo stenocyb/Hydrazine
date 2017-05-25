@@ -64,7 +64,6 @@ public class UsernameGenerator
 	public String generateRandom(int length)
 	{
 		StringBuilder sb = new StringBuilder(length);
-		Random r = new Random();
 		
 		if(length < 3 || length > 16)
 		{
@@ -74,9 +73,9 @@ public class UsernameGenerator
 		}
 		else
 		{
-			for(int i = 0; i < length; i++)
+			for(int i = 0; i < 3+(int)(Math.random()*14); i++)
 			{
-				sb.append(allowedChars.charAt(r.nextInt(allowedChars.length())));
+				sb.append(allowedChars.split("")[(int)(Math.random()*allowedChars.split("").length)]);
 			}
 			
 			return sb.toString();
