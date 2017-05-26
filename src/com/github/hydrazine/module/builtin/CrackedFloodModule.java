@@ -12,7 +12,6 @@ import org.spacehq.packetlib.event.session.SessionAdapter;
 
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
-import com.github.hydrazine.minecraft.ClientFactory;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleSettings;
@@ -54,8 +53,6 @@ public class CrackedFloodModule implements Module
 				
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
-		Authenticator auth = new Authenticator();
-		ClientFactory factory = new ClientFactory();
 		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
 		
 		int bots = 5;
@@ -93,11 +90,11 @@ public class CrackedFloodModule implements Module
 			{
 				for(int i = 0; i < bots; i++)
 				{
-					String username = auth.getUsername();
+					String username = Authenticator.getUsername();
 					
 					MinecraftProtocol protocol = new MinecraftProtocol(username);
 					
-					Client client = ConnectionHelper.connect(factory, protocol, server);
+					Client client = ConnectionHelper.connect(protocol, server);
 					
 					registerListeners(client);
 					
@@ -149,7 +146,7 @@ public class CrackedFloodModule implements Module
 					
 					MinecraftProtocol protocol = new MinecraftProtocol(username);
 					
-					Client client = ConnectionHelper.connect(factory, protocol, server);
+					Client client = ConnectionHelper.connect(protocol, server);
 					
 					registerListeners(client);
 					

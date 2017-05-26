@@ -69,7 +69,7 @@ public class Authenticator
 	/**
 	 * @return The auth proxy specified by the user
 	 */
-	public Proxy getAuthProxy()
+	public static Proxy getAuthProxy()
 	{
 		if(Hydrazine.settings.hasSetting("authproxy"))
 		{
@@ -98,7 +98,7 @@ public class Authenticator
 	/**
 	 * @return The credentials specified by the user
 	 */
-	public Credentials getCredentials()
+	public static Credentials getCredentials()
 	{
 		if(Hydrazine.settings.hasSetting("credentials"))
 		{
@@ -127,7 +127,7 @@ public class Authenticator
 	/**
 	 * @return The (generated) username specified by the user
 	 */
-	public String getUsername()
+	public static String getUsername()
 	{
 		if(Hydrazine.settings.hasSetting("username"))
 		{

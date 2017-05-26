@@ -303,7 +303,7 @@ public class Hydrazine
 		String env = System.getenv(Hydrazine.modEnvVar);
 		File dir = new File(env);
 		
-		for(File f : mm.getJarFilesFromDir(dir))
+		for(File f : ModuleManager.getJarFilesFromDir(dir))
 		{
 			try 
 			{
