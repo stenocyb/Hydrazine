@@ -15,7 +15,6 @@ import org.spacehq.packetlib.event.session.SessionAdapter;
 
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
-import com.github.hydrazine.minecraft.ClientFactory;
 import com.github.hydrazine.minecraft.Credentials;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
@@ -60,17 +59,16 @@ public class ChatReaderModule implements Module
 		Scanner sc = new Scanner(System.in);
 		
 		Authenticator auth = new Authenticator();
-		ClientFactory factory = new ClientFactory();
 		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
 		
 		// Server has offline mode enabled
 		if(Hydrazine.settings.hasSetting("username") || Hydrazine.settings.hasSetting("genuser"))
 		{
-			String username = auth.getUsername();
+			String username = Authenticator.getUsername();
 			
 			MinecraftProtocol protocol = new MinecraftProtocol(username);
 			
-			Client client = ConnectionHelper.connect(factory, protocol, server);
+			Client client = ConnectionHelper.connect(protocol, server);
 			
 			registerListeners(client);
 			
@@ -93,23 +91,23 @@ public class ChatReaderModule implements Module
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
 		{
-		    Credentials creds = auth.getCredentials();
+		    Credentials creds = Authenticator.getCredentials();
 			Client client = null;
 			
 			// Check if auth proxy should be used
 			if(Hydrazine.settings.hasSetting("authproxy"))
 			{
-				Proxy proxy = auth.getAuthProxy();
+				Proxy proxy = Authenticator.getAuthProxy();
 				
 				MinecraftProtocol protocol = auth.authenticate(creds, proxy);
 				
-				client = ConnectionHelper.connect(factory, protocol, server);
+				client = ConnectionHelper.connect(protocol, server);
 			}
 			else
 			{				
 				MinecraftProtocol protocol = auth.authenticate(creds);
 				
-				client = ConnectionHelper.connect(factory, protocol, server);
+				client = ConnectionHelper.connect(protocol, server);
 			}
 						
 			registerListeners(client);

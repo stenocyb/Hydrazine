@@ -9,9 +9,9 @@ import org.spacehq.packetlib.event.session.ConnectedEvent;
 import org.spacehq.packetlib.event.session.DisconnectedEvent;
 import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 import org.spacehq.packetlib.event.session.SessionAdapter;
+import org.spacehq.packetlib.tcp.TcpSessionFactory;
 
 import com.github.hydrazine.Hydrazine;
-import com.github.hydrazine.minecraft.ClientFactory;
 import com.github.hydrazine.minecraft.Server;
 
 /**
@@ -62,7 +62,7 @@ public class ConnectionHelper
 	/**
 	 * Connects a client to a server
 	 */
-	public static Client connect(ClientFactory factory, MinecraftProtocol protocol, Server server)
+	public static Client connect(MinecraftProtocol protocol, Server server)
 	{
 		// Check if authenticated successfully
 		if(protocol == null)
@@ -87,7 +87,7 @@ public class ConnectionHelper
 				return null;
 			}
 			
-			Client client = factory.create(server, protocol, proxy);
+			Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory(proxy));
 			
 			registerDefaultListeners(client);
 						
@@ -97,7 +97,7 @@ public class ConnectionHelper
 		}
 		else
 		{
-			Client client = factory.create(server, protocol);
+			Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory());
 			
 			registerDefaultListeners(client);
 						

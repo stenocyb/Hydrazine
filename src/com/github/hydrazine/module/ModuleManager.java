@@ -73,7 +73,7 @@ public class ModuleManager
 	 * @param dir the directory
 	 * @return see method description ;)
 	 */
-	public File[] getJarFilesFromDir(File dir)
+	public static File[] getJarFilesFromDir(File dir)
 	{
 		ArrayList<File> jarFiles = new ArrayList<File>();
 		

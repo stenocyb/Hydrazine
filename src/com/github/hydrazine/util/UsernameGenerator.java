@@ -35,7 +35,7 @@ public class UsernameGenerator
 	{
 		if(method.equalsIgnoreCase("random"))
 		{
-			return generateRandom(16);
+			return generateRandom();
 		}
 		else if(method.equalsIgnoreCase("natural"))
 		{
@@ -61,25 +61,16 @@ public class UsernameGenerator
 	 * @param length The desired length the username should have
 	 * @return A generated, valid minecraft username
 	 */
-	public String generateRandom(int length)
+	public String generateRandom()
 	{
-		StringBuilder sb = new StringBuilder(length);
+		StringBuilder sb = new StringBuilder();
 		
-		if(length < 3 || length > 16)
+		for(int i = 0; i < 3+(int)(Math.random()*14); i++)
 		{
-			System.out.println(Hydrazine.errorPrefix + length + " is not a valid minecraft username length.");
-			
-			return null;
+			sb.append(allowedChars.split("")[(int)(Math.random() * allowedChars.length())]);
 		}
-		else
-		{
-			for(int i = 0; i < 3+(int)(Math.random()*14); i++)
-			{
-				sb.append(allowedChars.split("")[(int)(Math.random()*allowedChars.split("").length)]);
-			}
 			
-			return sb.toString();
-		}
+		return sb.toString();
 	}
 	
 	/**

@@ -168,4 +168,12 @@ public class FileFactory
 		return content.toArray(new String[content.size()]);
 	}
 	
+	/**
+	 * @return the file
+	 */
+	public File getFile()
+	{
+		return file;
+	}
+	
 }
