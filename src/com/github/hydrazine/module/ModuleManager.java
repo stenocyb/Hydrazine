@@ -39,10 +39,12 @@ public class ModuleManager
 		Manifest mf = modFile.getManifest();
 		Attributes attr = mf.getMainAttributes();
 		String mainClass = attr.getValue(Attributes.Name.MAIN_CLASS);
-		
-		Class c = new URLClassLoader(new URL[]{ new File(path).toURI().toURL() }).loadClass(mainClass);
+		URLClassLoader classLoader = new URLClassLoader(new URL[]{ new File(path).toURI().toURL() });
+		Class c = classLoader.loadClass(mainClass);
 		
 		Class[] interfaces = c.getInterfaces();
+		
+		classLoader.close();
 		
 		boolean isPlugin = false;
 		
