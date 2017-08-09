@@ -81,6 +81,8 @@ public class FileFactory
 			}
 		}
 		
+		s.close();
+		
 		return content.toArray(new Proxy[content.size()]);
 	}
 	
@@ -127,6 +129,8 @@ public class FileFactory
 			}
 		}
 		
+		s.close();
+		
 		return content.toArray(new Credentials[content.size()]);
 	}
 	
@@ -164,6 +168,8 @@ public class FileFactory
 				continue;
 			}
 		}
+		
+		s.close();
 		
 		return content.toArray(new String[content.size()]);
 	}
