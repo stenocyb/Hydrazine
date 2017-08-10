@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.data.game.values.MessageType;
+import org.spacehq.mc.protocol.data.message.Message;
+import org.spacehq.mc.protocol.data.message.TranslationMessage;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerChatPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
@@ -212,11 +214,32 @@ public class ChatReaderModule implements Module
 					
 					// Check if message is a chat message
 					if(packet.getType() != MessageType.NOTIFICATION)
-					{            		
+					{         
 						if(settings.containsKey("filterColorCodes") && settings.getProperty("filterColorCodes").equals("true"))
 						{
 							String line = packet.getMessage().getFullText();
-								                		
+							
+							if(packet.getMessage() instanceof TranslationMessage)
+							{
+								TranslationMessage msg = (TranslationMessage) packet.getMessage();
+								
+								String message = "";
+								
+								if(msg.getTranslationParams().length == 2)
+								{
+									message = "<" + msg.getTranslationParams()[0] + "> " + msg.getTranslationParams()[1];
+								}
+								else
+								{
+									for(Message m : msg.getTranslationParams())
+									{
+										message = message + m.getFullText() + " ";
+									}
+								}
+								
+								line = message;
+							}
+															                		
 							String builder = line;
 								                		       
 							// Filter out color codes
@@ -247,7 +270,30 @@ public class ChatReaderModule implements Module
 						}
 						else
 						{
-							System.out.println(Hydrazine.inputPrefix + packet.getMessage().getFullText());
+							if(packet.getMessage() instanceof TranslationMessage)
+							{
+								TranslationMessage msg = (TranslationMessage) packet.getMessage();
+								
+								String message = "";
+								
+								if(msg.getTranslationParams().length == 2)
+								{
+									message = "<" + msg.getTranslationParams()[0] + "> " + msg.getTranslationParams()[1];
+								}
+								else
+								{
+									for(Message m : msg.getTranslationParams())
+									{
+										message = message + m.getFullText() + " ";
+									}
+								}
+								
+								System.out.println(message);
+							}
+							else
+							{
+								System.out.println(packet.getMessage().getFullText());
+							}
 						}
 					}
 				}
