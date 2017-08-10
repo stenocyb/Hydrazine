@@ -4,9 +4,6 @@ import java.io.File;
 import java.net.Proxy;
 import java.util.Scanner;
 
-import org.spacehq.mc.protocol.MinecraftProtocol;
-import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
-import org.spacehq.packetlib.Client;
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
 import com.github.hydrazine.minecraft.Credentials;
@@ -14,6 +11,9 @@ import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
+import com.github.steveice10.packetlib.Client;
 
 /**
  * 

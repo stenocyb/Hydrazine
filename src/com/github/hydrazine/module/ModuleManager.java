@@ -39,6 +39,7 @@ public class ModuleManager
 		Manifest mf = modFile.getManifest();
 		Attributes attr = mf.getMainAttributes();
 		String mainClass = attr.getValue(Attributes.Name.MAIN_CLASS);
+		
 		URLClassLoader classLoader = new URLClassLoader(new URL[]{ new File(path).toURI().toURL() });
 		Class c = classLoader.loadClass(mainClass);
 		

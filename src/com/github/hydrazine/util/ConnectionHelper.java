@@ -2,17 +2,17 @@ package com.github.hydrazine.util;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import org.spacehq.mc.protocol.MinecraftProtocol;
-import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
-import org.spacehq.packetlib.Client;
-import org.spacehq.packetlib.event.session.ConnectedEvent;
-import org.spacehq.packetlib.event.session.DisconnectedEvent;
-import org.spacehq.packetlib.event.session.PacketReceivedEvent;
-import org.spacehq.packetlib.event.session.SessionAdapter;
-import org.spacehq.packetlib.tcp.TcpSessionFactory;
 
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Server;
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
+import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.event.session.ConnectedEvent;
+import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
+import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
+import com.github.steveice10.packetlib.event.session.SessionAdapter;
+import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 
 /**
  * 
