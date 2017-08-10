@@ -1,6 +1,6 @@
 ![Logo](http://i.imgur.com/mqn4TON.png)
 
-[![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8-orange.svg)](https://minecraft.net)
+[![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8%20%26%201.12.1-orange.svg](https://minecraft.net)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/mit-license.html)
 [![Modules](https://img.shields.io/badge/Modules-6-yellow.svg)](https://github.com/xTACTIXzZ/Hydrazine/wiki/Module-list)
 [![Status](https://img.shields.io/badge/Status-Alpha-red.svg)](https://alphavulture.com/wp-content/uploads/2013/12/alpha.png)
