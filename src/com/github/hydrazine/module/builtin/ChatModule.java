@@ -49,6 +49,8 @@ public class ChatModule implements Module
 		settings.load();
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
+		
+		System.out.println(Hydrazine.infoPrefix + "Note: You can send a message x amount of times by adding a '%x' to the message. (Without the quotes)");
 
 		Scanner sc = new Scanner(System.in);
 		
