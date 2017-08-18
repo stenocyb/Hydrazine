@@ -1,6 +1,7 @@
 package com.github.hydrazine.util;
 
 import java.net.InetSocketAddress;
+
 import java.net.Proxy;
 
 import com.github.hydrazine.Hydrazine;

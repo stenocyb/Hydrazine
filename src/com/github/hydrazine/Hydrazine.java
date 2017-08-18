@@ -21,6 +21,7 @@ import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.module.builtin.PremiumFloodModule;
 import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
+import com.github.hydrazine.module.builtin.ConsoleClientModule;
 import com.github.hydrazine.module.builtin.CrackedFloodModule;
 import com.github.hydrazine.util.Settings;
 
@@ -360,6 +361,9 @@ public class Hydrazine
 		
 		PremiumFloodModule premiumFloodM = new PremiumFloodModule();
 		loadedModules.add(premiumFloodM);
+		
+		ConsoleClientModule consoleClientM = new ConsoleClientModule();
+		loadedModules.add(consoleClientM);
 	}
 
 }
