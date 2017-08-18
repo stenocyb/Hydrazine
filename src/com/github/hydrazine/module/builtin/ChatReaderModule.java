@@ -13,7 +13,6 @@ import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.game.MessageType;
-import com.github.steveice10.mc.protocol.data.message.Message;
 import com.github.steveice10.mc.protocol.data.message.TranslationMessage;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
@@ -213,7 +212,7 @@ public class ChatReaderModule implements Module
 					
 					// Check if message is a chat message
 					if(packet.getType() != MessageType.NOTIFICATION)
-					{            		
+					{         
 						if(settings.containsKey("filterColorCodes") && settings.getProperty("filterColorCodes").equals("true"))
 						{
 							String line = packet.getMessage().getFullText();
@@ -224,21 +223,32 @@ public class ChatReaderModule implements Module
 								
 								String message = "";
 								
-								if(msg.getTranslationParams().length == 2)
+								if(msg.getTranslationKey().startsWith("chat.type"))
 								{
-									message = "<" + msg.getTranslationParams()[0] + "> " + msg.getTranslationParams()[1];
+									message = String.format("<%s> %s", (Object[]) msg.getTranslationParams());
 								}
-								else
+								else if(msg.getTranslationKey().equals("commands.message.display.incoming"))
 								{
-									for(Message m : msg.getTranslationParams())
+									message = String.format("[PM] <%s> %s", (Object[]) msg.getTranslationParams());					
+								}
+								else if(msg.getTranslationKey().startsWith("multiplayer.player"))
+								{
+									if(msg.getTranslationKey().endsWith("left"))
 									{
-										message = message + m.getFullText() + " ";
+										message = String.format("%s left the game.", (Object[]) msg.getTranslationParams());							
+									}
+									else if(msg.getTranslationKey().endsWith("joined"))
+									{
+										message = String.format("%s joined the game.", (Object[]) msg.getTranslationParams());	
 									}
 								}
 								
-								line = message;
+								if(!message.equals(""))
+								{
+									line = message;
+								}
 							}
-								                		
+															                		
 							String builder = line;
 								                		       
 							// Filter out color codes
@@ -272,22 +282,34 @@ public class ChatReaderModule implements Module
 							if(packet.getMessage() instanceof TranslationMessage)
 							{
 								TranslationMessage msg = (TranslationMessage) packet.getMessage();
-								
-								String message = "";
-								
-								if(msg.getTranslationParams().length == 2)
+																
+								if(msg.getTranslationKey().startsWith("chat.type"))
 								{
-									message = "<" + msg.getTranslationParams()[0] + "> " + msg.getTranslationParams()[1];
+									String message = String.format("<%s> %s", (Object[]) msg.getTranslationParams());
+									
+									System.out.println(message);
 								}
-								else
+								else if(msg.getTranslationKey().equals("commands.message.display.incoming"))
 								{
-									for(Message m : msg.getTranslationParams())
+									String message = String.format("[PM] <%s> %s", (Object[]) msg.getTranslationParams());
+									
+									System.out.println(message);
+								}
+								else if(msg.getTranslationKey().startsWith("multiplayer.player"))
+								{
+									if(msg.getTranslationKey().endsWith("left"))
 									{
-										message = message + m.getFullText() + " ";
+										String message = String.format("%s left the game.", (Object[]) msg.getTranslationParams());
+										
+										System.out.println(message);
+									}
+									else if(msg.getTranslationKey().endsWith("joined"))
+									{
+										String message = String.format("%s joined the game.", (Object[]) msg.getTranslationParams());
+										
+										System.out.println(message);
 									}
 								}
-								
-								System.out.println(message);
 							}
 							else
 							{
