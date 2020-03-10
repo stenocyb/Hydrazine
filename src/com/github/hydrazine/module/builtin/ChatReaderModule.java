@@ -249,27 +249,28 @@ public class ChatReaderModule implements Module
 									line = message;
 								}
 							}
-															                		
-							String builder = line;
-								                		       
+				                		       
 							// Filter out color codes
-							if(builder.contains("ยง"))
+							if(line.contains("ง"))
 							{
-								int count = builder.length() - builder.replace("ยง", "").length();
+								String builder = line;
+								
+								int count = line.length() - line.replaceAll("ง", "").length();
 								
 								for(int i = 0; i < count; i++)
 								{
-									int index = builder.indexOf("ยง");
+									int index = builder.indexOf("ง");
 									
 									if(index > (-1)) // Check if index is invalid, happens sometimes.
 									{		
-										String buf = builder.substring(index, index + 2);
+										String buf = builder.substring(index, index + 1);
 										
 										String repl = builder.replace(buf, "");
 										                				
 										builder = repl;
 									}
 								}
+								
 								
 								System.out.println(Hydrazine.inputPrefix + builder);
 							}

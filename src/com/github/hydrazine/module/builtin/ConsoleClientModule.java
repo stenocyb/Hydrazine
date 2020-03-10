@@ -204,20 +204,21 @@ public class ConsoleClientModule implements Module
 								}
 							}
 															                		
-							String builder = line;
-								                		       
+               		       
 							// Filter out color codes
-							if(builder.contains("ยง"))
+							if(line.contains("ง"))
 							{
-								int count = builder.length() - builder.replace("ยง", "").length();
+								String builder = line;
+								
+								int count = line.length() - line.replaceAll("ง", "").length();
 								
 								for(int i = 0; i < count; i++)
 								{
-									int index = builder.indexOf("ยง");
+									int index = builder.indexOf("ง");
 									
 									if(index > (-1)) // Check if index is invalid, happens sometimes.
 									{		
-										String buf = builder.substring(index, index + 2);
+										String buf = builder.substring(index, index + 1);
 										
 										String repl = builder.replace(buf, "");
 										                				
@@ -304,27 +305,22 @@ public class ConsoleClientModule implements Module
 		{
 			int index = line.indexOf("%");
 			String end = line.substring(index, line.length());			
-			String s = end.replaceFirst("%", "");
+			String amount = end.replaceFirst("%", "");
 						
-			if(s.contains("%"))
-			{								
-				int index2 = line.replaceFirst("%", "X").indexOf("%");
-								
-				String part = line.substring(index, index2);
-						
-				line = line.replaceAll(part + "%", "");
-				
-				part = part.replaceAll("%", "");
-								
-				try
-				{
-					sendTime = Integer.parseInt(part);
-				}
-				catch(Exception e)
-				{
-					sendTime = 1;
-				}				
+			try
+			{
+				sendTime = Integer.parseInt(amount);
 			}
+			catch(Exception e)
+			{
+				//Either %x not at the end of line
+				//Or x is not a number
+				sendTime = 1;
+			}
+			
+			// Remove "%x" from line
+			line = line.substring(0, index);
+			line = line.replaceAll("%", "");
 		}
 		
 		for(int i = 0; i < sendTime; i++)

@@ -122,8 +122,6 @@ public class ChatModule implements Module
 	@Override
 	public void configure() 
 	{		
-		settings.setProperty("sendDelay", ModuleSettings.askUser("Delay between sending messages: "));
-		
 		// Create configuration file if not existing
 		if(!configFile.exists())
 		{
@@ -134,25 +132,57 @@ public class ChatModule implements Module
 				return;
 			}
 		}
+				
+		boolean answer = ModuleSettings.askUserYesNo("Send automated message?");
+		settings.setProperty("automatedMessages", String.valueOf(answer));
+		
+		if(answer)
+		{
+			settings.setProperty("message", ModuleSettings.askUser("Message to send: "));
+		}
+		
+		settings.setProperty("sendDelay", ModuleSettings.askUser("Delay between sending messages: "));
 		
 		// Store configuration variables
 		settings.store();
+	}
+	
+	private void sendAutomatedMessage(Client client, int sendDelay, String msg)
+	{
+		try 
+		{
+			Thread.sleep(sendDelay);
+		} 
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
+		client.getSession().send(new ClientChatPacket(msg));
+		System.out.print(".");
 	}
 	
 	/*
 	 * Does all the input and chatting
 	 */
 	private void doStuff(Client client, Scanner sc)
-	{			
-		System.out.print(Hydrazine.inputPrefix);
-		
+	{					
 		int sendDelay = 1000;
+		boolean automatedMessage = false;
+		String msg = null;
 		
 		if(configFile.exists())
 		{
 			try
 			{
 				sendDelay = Integer.parseInt(settings.getProperty("sendDelay"));
+				automatedMessage = Boolean.valueOf(settings.getProperty("automatedMessages"));
+				
+				if(automatedMessage)
+				{
+					msg = settings.getProperty("message");
+				}
+					
 			}
 			catch(Exception e)
 			{
@@ -160,48 +190,52 @@ public class ChatModule implements Module
 			}
 		}
 		
-		String line = sc.nextLine();
-		
-		int sendTime = 1;
-		
-		if(line.contains("%"))
+		if(automatedMessage)
 		{
-			int index = line.indexOf("%");
-			String end = line.substring(index, line.length());			
-			String s = end.replaceFirst("%", "");
-						
-			if(s.contains("%"))
-			{								
-				int index2 = line.replaceFirst("%", "X").indexOf("%");
-								
-				String part = line.substring(index, index2);
-						
-				line = line.replaceAll(part + "%", "");
+			sendAutomatedMessage(client, sendDelay, msg);
+		}
+		else
+		{
+			System.out.print(Hydrazine.inputPrefix);
+
+			String line = sc.nextLine();
 				
-				part = part.replaceAll("%", "");
-								
+			int sendTime = 1;
+			
+			if(line.contains("%"))
+			{
+				int index = line.indexOf("%");
+				String end = line.substring(index, line.length());			
+				String amount = end.replaceFirst("%", "");
+							
 				try
 				{
-					sendTime = Integer.parseInt(part);
+					sendTime = Integer.parseInt(amount);
 				}
 				catch(Exception e)
 				{
+					//Either %x not at the end of line
+					//Or x is not a number
 					sendTime = 1;
-				}				
+				}
+				
+				// Remove "%x" from line
+				line = line.substring(0, index);
+				line = line.replaceAll("%", "");
 			}
-		}
-		
-		for(int i = 0; i < sendTime; i++)
-		{
-			client.getSession().send(new ClientChatPacket(line));
 			
-			try 
+			for(int i = 0; i < sendTime; i++)
 			{
-				Thread.sleep(sendDelay);
-			} 
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
+				client.getSession().send(new ClientChatPacket(line));
+				
+				try 
+				{
+					Thread.sleep(sendDelay);
+				} 
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 	}
