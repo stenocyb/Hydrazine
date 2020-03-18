@@ -67,7 +67,16 @@ public class PremiumFloodModule implements Module
 		}
 		else
 		{
-			System.out.println(Hydrazine.warnPrefix + "This module hasn't been configured yet. Append the switch \'-c\' to the command to do so.");
+			if(ModuleSettings.askUserYesNo("This module hasn't been configured yet. Would you like to do so now?"))
+			{
+				configure();
+
+				start();
+			}
+			else
+			{
+				System.out.println(Hydrazine.errorPrefix + "Append the \'-c\' switch to configure the module.");
+			}
 			
 			return;
 		}
