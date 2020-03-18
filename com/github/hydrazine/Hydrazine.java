@@ -16,14 +16,15 @@ import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.ModuleSettings;
-import com.github.hydrazine.module.builtin.IconGrabModule;
-import com.github.hydrazine.module.builtin.InfoModule;
-import com.github.hydrazine.module.builtin.PremiumFloodModule;
 import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
 import com.github.hydrazine.module.builtin.ConsoleClientModule;
 import com.github.hydrazine.module.builtin.CrackedFloodModule;
+import com.github.hydrazine.module.builtin.IconGrabModule;
+import com.github.hydrazine.module.builtin.InfoModule;
+import com.github.hydrazine.module.builtin.PremiumFloodModule;
 import com.github.hydrazine.util.Settings;
+
 
 /**
  * 
@@ -57,6 +58,15 @@ public class Hydrazine
 	 */
 	public static void main(String[] args)
 	{
+		System.out.println("      _    _           _               _            ");
+		System.out.println("     | |  | |         | |             (_)           ");
+		System.out.println("     | |__| |_   _  __| |_ __ __ _ _____ _ __   ___ ");
+		System.out.println("     |  __  | | | |/ _` | '__/ _` |_  / | '_ \\ / _ \\");
+		System.out.println("     | |  | | |_| | (_| | | | (_| |/ /| | | | |  __/     v" + progVer + " (Minecraft 1.8)");
+		System.out.println("     |_|  |_|\\__, |\\__,_|_|  \\__,_/___|_|_| |_|\\___|");
+		System.out.println("              __/ |                                 ");
+		System.out.println("             |___/                                  \n");
+
 		Options options = new Options();
 		
 		registerOptions(options);
@@ -94,7 +104,7 @@ public class Hydrazine
 		} 
 		catch (ParseException e)
 		{
-			System.out.println(Hydrazine.errorPrefix + "Missing host (-h) or missing module (-m) or invalid option passed.\n");
+ 			System.out.println(Hydrazine.errorPrefix + "Missing host (-h), missing module (-m) or invalid option passed.\n");			
 			// Print help when invalid syntax
 			formatter.printHelp(100, "hydrazine [Options] -h SERVER -m MODULE", "\nOPTIONS:", options, "\nEXAMPLE:\njava -jar Hydrazine.jar -h www.example.com -p 30000 -m chat -u username123");
 			
@@ -151,7 +161,7 @@ public class Hydrazine
 		settings.setSetting("host", server.getHost());
 		settings.setSetting("port", String.valueOf(server.getPort()));
 				
-		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine " + Hydrazine.progVer + " at " + new Date().toString() + "\n");
+		System.out.println(Hydrazine.infoPrefix + "Starting Hydrazine v" + Hydrazine.progVer + " at " + new Date().toString() + "\n");
 		
 		// Start internal module
 		if(!settings.getSetting("module").contains(".jar"))

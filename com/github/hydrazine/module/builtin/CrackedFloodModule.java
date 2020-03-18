@@ -181,8 +181,8 @@ public class CrackedFloodModule implements Module
 		// User forgot to pass the options
 		else
 		{
-			System.out.println(Hydrazine.errorPrefix + "No client option specified. You have to append one of those switches to the command: -u or -gu");
-		}
+ 			System.out.println(Hydrazine.errorPrefix + "No client option specified. Configure this module to load usernames from a file OR use the -gu switch.");
+ 		}
 	}
 
 	@Override
