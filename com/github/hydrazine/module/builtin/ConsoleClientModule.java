@@ -310,27 +310,22 @@ public class ConsoleClientModule implements Module
 		{
 			int index = line.indexOf("%");
 			String end = line.substring(index, line.length());			
-			String s = end.replaceFirst("%", "");
+			String amount = end.replaceFirst("%", "");
 						
-			if(s.contains("%"))
-			{								
-				int index2 = line.replaceFirst("%", "X").indexOf("%");
-								
-				String part = line.substring(index, index2);
-						
-				line = line.replaceAll(part + "%", "");
-				
-				part = part.replaceAll("%", "");
-								
-				try
-				{
-					sendTime = Integer.parseInt(part);
-				}
-				catch(Exception e)
-				{
-					sendTime = 1;
-				}				
+			try
+			{
+				sendTime = Integer.parseInt(amount);
 			}
+			catch(Exception e)
+			{
+				//Either %x not at the end of line
+				//Or x is not a number
+				sendTime = 1;
+			}
+			
+			// Remove "%x" from line
+			line = line.substring(0, index);
+			line = line.replaceAll("%", "");
 		}
 		
 		for(int i = 0; i < sendTime; i++)
@@ -347,5 +342,4 @@ public class ConsoleClientModule implements Module
 			}
 		}
 	}
-
 }
