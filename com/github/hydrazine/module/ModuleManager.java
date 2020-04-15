@@ -40,9 +40,9 @@ public class ModuleManager
 		Attributes attr = mf.getMainAttributes();
 		String mainClass = attr.getValue(Attributes.Name.MAIN_CLASS);
 		URLClassLoader classLoader = new URLClassLoader(new URL[]{ new File(path).toURI().toURL() });
-		Class c = classLoader.loadClass(mainClass);
+		Class<?> c = classLoader.loadClass(mainClass);
 		
-		Class[] interfaces = c.getInterfaces();
+		Class<?>[] interfaces = c.getInterfaces();
 		
 		classLoader.close();
 		

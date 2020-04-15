@@ -10,6 +10,7 @@ import org.spacehq.mc.protocol.data.message.TranslationMessage;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerChatPacket;
 import org.spacehq.packetlib.Client;
+import org.spacehq.packetlib.event.session.DisconnectedEvent;
 import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 import org.spacehq.packetlib.event.session.SessionAdapter;
 
@@ -273,6 +274,11 @@ public class ConsoleClientModule implements Module
 						}
 					}
 				}
+			}
+			
+			public void disconnected(DisconnectedEvent event) 
+			{
+				System.exit(1);
 			}
 		});
 	}

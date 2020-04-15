@@ -62,7 +62,7 @@ public class Hydrazine
 		System.out.println("     | |  | |         | |             (_)           ");
 		System.out.println("     | |__| |_   _  __| |_ __ __ _ _____ _ __   ___ ");
 		System.out.println("     |  __  | | | |/ _` | '__/ _` |_  / | '_ \\ / _ \\");
-		System.out.println("     | |  | | |_| | (_| | | | (_| |/ /| | | | |  __/     v" + progVer + " (Minecraft 1.8)");
+		System.out.println("     | |  | | |_| | (_| | | | (_| |/ /| | | | |  __/     v" + progVer + " (Minecraft 1.8.8)");
 		System.out.println("     |_|  |_|\\__, |\\__,_|_|  \\__,_/___|_|_| |_|\\___|");
 		System.out.println("              __/ |                                 ");
 		System.out.println("             |___/                                  \n");
