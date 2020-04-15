@@ -7,18 +7,17 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-import org.spacehq.mc.protocol.MinecraftConstants;
-import org.spacehq.mc.protocol.MinecraftProtocol;
-import org.spacehq.mc.protocol.data.SubProtocol;
-import org.spacehq.mc.protocol.data.status.ServerStatusInfo;
-import org.spacehq.mc.protocol.data.status.handler.ServerInfoHandler;
-import org.spacehq.packetlib.Client;
-import org.spacehq.packetlib.Session;
-import org.spacehq.packetlib.tcp.TcpSessionFactory;
-
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
+import com.github.steveice10.mc.protocol.MinecraftConstants;
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.data.SubProtocol;
+import com.github.steveice10.mc.protocol.data.status.ServerStatusInfo;
+import com.github.steveice10.mc.protocol.data.status.handler.ServerInfoHandler;
+import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.Session;
+import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
 
 /**
  * 

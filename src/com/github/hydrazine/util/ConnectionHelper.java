@@ -54,7 +54,7 @@ public class ConnectionHelper
             @Override
             public void disconnected(DisconnectedEvent event) 
             {
-            	System.out.println(Hydrazine.infoPrefix + "Client disconnected: " + event.getReason());           	
+            	System.out.println(Hydrazine.infoPrefix + "Client disconnected: " + event.getReason()); 
             }
         });
 	}
