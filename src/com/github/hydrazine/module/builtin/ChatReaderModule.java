@@ -323,10 +323,10 @@ public class ChatReaderModule implements Module
 			}
 			
 			@Override
-            public void disconnected(DisconnectedEvent event) 
-            {
-            	System.exit(1);
-            }
+			public void disconnected(DisconnectedEvent event) 
+			{
+				System.exit(1);
+			}
 		});
 	}
 }
