@@ -7,6 +7,9 @@ import java.util.Scanner;
 import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.packetlib.Client;
+import org.spacehq.packetlib.event.session.DisconnectedEvent;
+import org.spacehq.packetlib.event.session.SessionAdapter;
+
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
 import com.github.hydrazine.minecraft.Credentials;
@@ -97,6 +100,8 @@ public class ChatModule implements Module
 				client = ConnectionHelper.connect(protocol, server);
 			}
 			
+			registerListeners(client);
+			
 			while(client.getSession().isConnected())
 			{
 				doStuff(client, sc);
@@ -137,6 +142,18 @@ public class ChatModule implements Module
 		
 		// Store configuration variables
 		settings.store();
+	}
+	
+	private void registerListeners(Client client)
+	{
+		client.getSession().addListener(new SessionAdapter() 
+		{
+			@Override
+            public void disconnected(DisconnectedEvent event) 
+            {
+            	System.exit(1);
+            }
+		});
 	}
 	
 	/*
