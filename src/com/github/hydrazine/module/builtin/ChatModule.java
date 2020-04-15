@@ -4,9 +4,6 @@ import java.io.File;
 import java.net.Proxy;
 import java.util.Scanner;
 
-import org.spacehq.mc.protocol.MinecraftProtocol;
-import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
-import org.spacehq.packetlib.Client;
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
 import com.github.hydrazine.minecraft.Credentials;
@@ -14,6 +11,11 @@ import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
+import com.github.steveice10.mc.protocol.MinecraftProtocol;
+import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
+import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
+import com.github.steveice10.packetlib.event.session.SessionAdapter;
 
 /**
  * 
@@ -66,6 +68,8 @@ public class ChatModule implements Module
 			
 			Client client = ConnectionHelper.connect(protocol, server);
 			
+			registerListeners(client);
+			
 			while(client.getSession().isConnected())
 			{
 				doStuff(client, sc);
@@ -96,6 +100,8 @@ public class ChatModule implements Module
 				
 				client = ConnectionHelper.connect(protocol, server);
 			}
+			
+			registerListeners(client);
 			
 			while(client.getSession().isConnected())
 			{
@@ -160,6 +166,18 @@ public class ChatModule implements Module
 		
 		client.getSession().send(new ClientChatPacket(msg));
 		System.out.print(".");
+	}
+	
+	private void registerListeners(Client client)
+	{
+		client.getSession().addListener(new SessionAdapter() 
+		{
+			@Override
+            public void disconnected(DisconnectedEvent event) 
+            {
+            	System.exit(1);
+            }
+		});
 	}
 	
 	/*
