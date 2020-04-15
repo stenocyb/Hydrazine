@@ -173,10 +173,10 @@ public class ChatModule implements Module
 		client.getSession().addListener(new SessionAdapter() 
 		{
 			@Override
-            public void disconnected(DisconnectedEvent event) 
-            {
-            	System.exit(1);
-            }
+			public void disconnected(DisconnectedEvent event) 
+			{
+				System.exit(1);
+			}
 		});
 	}
 	
