@@ -56,6 +56,13 @@ public class ChatReaderModule implements Module
 		// Load settings
 		settings.load();
 		
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to attack (-h)");
+			
+			System.exit(1);
+		}
+		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
 		Scanner sc = new Scanner(System.in);
@@ -322,6 +329,7 @@ public class ChatReaderModule implements Module
 				}
 			}
 			
+			@Override
 			public void disconnected(DisconnectedEvent event) 
 			{
 				System.exit(1);

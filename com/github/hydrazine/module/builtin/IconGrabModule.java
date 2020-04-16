@@ -47,6 +47,13 @@ public class IconGrabModule implements Module
 	@Override
 	public void start() 
 	{
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to grab the icon from (-h)");
+			
+			System.exit(1);
+		}
+		
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("> Enter the path where the icon should be saved:");

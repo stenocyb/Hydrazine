@@ -53,7 +53,14 @@ public class CrackedFloodModule implements Module
 	{
 		// Load settings
 		settings.load();
-				
+			
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to attack (-h)");
+			
+			System.exit(1);
+		}
+		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
 		server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
@@ -216,6 +223,11 @@ public class CrackedFloodModule implements Module
 		{
 			settings.setProperty("messageJoin", ModuleSettings.askUser("Message:"));
 			settings.setProperty("messageDelay", ModuleSettings.askUser("Time to wait before sending message:"));
+			
+			if(ModuleSettings.askUserYesNo("Send second message on join?"))
+			{
+				settings.setProperty("secondMessageJoin", ModuleSettings.askUser("Message:"));
+			}
 		}
 		else
 		{
@@ -279,6 +291,20 @@ public class CrackedFloodModule implements Module
 			        		}
 			        		
 			        		client.getSession().send(new ClientChatPacket(settings.getProperty("messageJoin")));
+			        		
+			        		if(settings.containsKey("secondMessageJoin") && !settings.getProperty("secondMessageJoin").isEmpty())
+			        		{
+			        			try 
+				        		{
+				        			Thread.sleep(delay);
+								} 
+				        		catch (InterruptedException e) 
+				        		{
+				        			return;
+				        		}
+			        			
+			        			client.getSession().send(new ClientChatPacket(settings.getProperty("secondMessageJoin")));
+			        		}
 			            }
 			        }
 			    }
