@@ -8,11 +8,6 @@ import com.github.hydrazine.module.Module;
 public class TestModule implements Module
 {
 	
-	public static void main(String[] args)
-	{
-		// This code does not get executed!
-	}
-	
 	@Override
 	public String getDescription()
 	{
