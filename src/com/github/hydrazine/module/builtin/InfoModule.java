@@ -41,6 +41,13 @@ public class InfoModule implements Module
 	@Override
 	public void start() 
 	{
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to get the information from (-h)");
+			
+			System.exit(1);
+		}
+		
 		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
 		MinecraftProtocol protocol = new MinecraftProtocol(SubProtocol.STATUS);
         Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory());

@@ -18,7 +18,9 @@ import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
+import com.github.hydrazine.module.builtin.MinecraftStatusModule;
 import com.github.hydrazine.module.builtin.PremiumFloodModule;
+import com.github.hydrazine.module.builtin.UUIDGrabModule;
 import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
 import com.github.hydrazine.module.builtin.ConsoleClientModule;
@@ -44,7 +46,7 @@ public class Hydrazine
 	public static final String modEnvVar = "HYDRAZINE";
 	
 	// Program version
-	public static final double progVer = 1.0;
+	public static final double progVer = 1.1;
 	
 	// Program settings
 	public static Settings settings = null;
@@ -240,7 +242,7 @@ public class Hydrazine
 		// Declare options
 		Option hostOpt = new Option("h", "host", true, "Target server to attack (ip or domain)");
 		hostOpt.setArgName("string");
-		hostOpt.setRequired(true);
+		hostOpt.setRequired(false);
 		Option portOpt = new Option("p", "port", true, "Port of the target server (default: 25565)");
 		portOpt.setArgName("int");
 		Option modOpt = new Option("m", "module", true, "Module to execute");
@@ -373,6 +375,12 @@ public class Hydrazine
 		
 		ConsoleClientModule consoleClientM = new ConsoleClientModule();
 		loadedModules.add(consoleClientM);
+		
+		MinecraftStatusModule minecraftStatusM = new MinecraftStatusModule();
+		loadedModules.add(minecraftStatusM);
+		
+		UUIDGrabModule uuidGrabM = new UUIDGrabModule();
+		loadedModules.add(uuidGrabM);
 	}
 
 }
