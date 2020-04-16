@@ -45,6 +45,13 @@ public class PremiumFloodModule implements Module
 		// Load settings
 		settings.load();
 				
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to attack (-h)");
+			
+			System.exit(1);
+		}
+		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
 		Authenticator auth = new Authenticator();
