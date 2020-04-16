@@ -36,27 +36,27 @@ public class ConnectionHelper
 	{
 		client.getSession().addListener(new SessionAdapter() 
 		{
-            @Override
-            public void packetReceived(PacketReceivedEvent event) 
-            {
-                if(event.getPacket() instanceof ServerJoinGamePacket) 
-                {
-                     System.out.println(Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " joined the game!");
-                }
-            }
-            
-            @Override
-            public void connected(ConnectedEvent event)
-            {
-                System.out.println(Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " connected to the server!");
-            }
-
-            @Override
-            public void disconnected(DisconnectedEvent event) 
-            {
-            	System.out.println(Hydrazine.infoPrefix + "Client disconnected: " + event.getReason()); 
-            }
-        });
+			@Override
+			public void packetReceived(PacketReceivedEvent event) 
+			{
+				if(event.getPacket() instanceof ServerJoinGamePacket) 
+				{
+					System.out.println(Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " joined the game!");
+				}
+			}
+			
+			@Override
+			public void connected(ConnectedEvent event)
+			{
+				System.out.println(Hydrazine.infoPrefix + ((MinecraftProtocol) client.getPacketProtocol()).getProfile().getName() + " connected to the server!");
+			}
+			
+			@Override
+			public void disconnected(DisconnectedEvent event) 
+			{
+				System.out.println(Hydrazine.infoPrefix + "Client disconnected: " + event.getReason()); 
+			}
+		});
 	}
 	
 	/**
