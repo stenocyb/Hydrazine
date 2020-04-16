@@ -44,6 +44,13 @@ public class PremiumFloodModule implements Module
 		// Load settings
 		settings.load();
 				
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to attack (-h)");
+			
+			System.exit(1);
+		}
+		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
 		Authenticator auth = new Authenticator();
@@ -66,7 +73,16 @@ public class PremiumFloodModule implements Module
 		}
 		else
 		{
-			System.out.println(Hydrazine.warnPrefix + "This module hasn't been configured yet. Append the switch \'-c\' to the command to do so.");
+			if(ModuleSettings.askUserYesNo("This module hasn't been configured yet. Would you like to do so now?"))
+			{
+				configure();
+
+				start();
+			}
+			else
+			{
+				System.out.println(Hydrazine.errorPrefix + "Append the \'-c\' switch to configure the module.");
+			}
 			
 			return;
 		}

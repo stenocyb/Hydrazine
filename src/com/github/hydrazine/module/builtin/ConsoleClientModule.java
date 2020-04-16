@@ -55,6 +55,13 @@ public class ConsoleClientModule implements Module
 		// Load settings
 		settings.load();
 		
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to attack (-h)");
+			
+			System.exit(1);
+		}
+		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
 		System.out.println(Hydrazine.infoPrefix + "Note: You can send a message x amount of times by adding a '%x' to the message. (Without the quotes)");
@@ -204,21 +211,20 @@ public class ConsoleClientModule implements Module
 								}
 							}
 															                		
-               		       
+							String builder = line;
+								                		       
 							// Filter out color codes
-							if(line.contains("ง"))
+							if(builder.contains("ยง"))
 							{
-								String builder = line;
-								
-								int count = line.length() - line.replaceAll("ง", "").length();
+								int count = builder.length() - builder.replace("ยง", "").length();
 								
 								for(int i = 0; i < count; i++)
 								{
-									int index = builder.indexOf("ง");
+									int index = builder.indexOf("ยง");
 									
 									if(index > (-1)) // Check if index is invalid, happens sometimes.
 									{		
-										String buf = builder.substring(index, index + 1);
+										String buf = builder.substring(index, index + 2);
 										
 										String repl = builder.replace(buf, "");
 										                				
@@ -343,5 +349,4 @@ public class ConsoleClientModule implements Module
 			}
 		}
 	}
-
 }
