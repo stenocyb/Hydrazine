@@ -36,7 +36,7 @@ public class InfoModule implements Module
 	@Override
 	public String getDescription() 
 	{
-		return "This module retrieves information of a minecraft server.";
+		return "This module retrieves information about a minecraft server.";
 	}
 	
 	@Override
