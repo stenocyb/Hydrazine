@@ -16,16 +16,17 @@ import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.ModuleSettings;
-import com.github.hydrazine.module.builtin.IconGrabModule;
-import com.github.hydrazine.module.builtin.InfoModule;
-import com.github.hydrazine.module.builtin.MinecraftStatusModule;
-import com.github.hydrazine.module.builtin.PremiumFloodModule;
-import com.github.hydrazine.module.builtin.UUIDGrabModule;
 import com.github.hydrazine.module.builtin.AltCheckerModule;
 import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
 import com.github.hydrazine.module.builtin.ConsoleClientModule;
 import com.github.hydrazine.module.builtin.CrackedFloodModule;
+import com.github.hydrazine.module.builtin.IconGrabModule;
+import com.github.hydrazine.module.builtin.InfoModule;
+import com.github.hydrazine.module.builtin.MinecraftStatusModule;
+import com.github.hydrazine.module.builtin.PremiumFloodModule;
+import com.github.hydrazine.module.builtin.SkinStealerModule;
+import com.github.hydrazine.module.builtin.UUIDGrabModule;
 import com.github.hydrazine.util.Settings;
 
 /**
@@ -385,6 +386,9 @@ public class Hydrazine
 		
 		AltCheckerModule altCheckerM = new AltCheckerModule();
 		loadedModules.add(altCheckerM);
+		
+		SkinStealerModule skinStealerM = new SkinStealerModule();
+		loadedModules.add(skinStealerM);
 	}
 
 }
