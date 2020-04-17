@@ -166,7 +166,6 @@ public class AltCheckerModule implements Module
 			settings.setProperty("outputFile", ModuleSettings.askUser("File path:"));
 		}
 		
-		// Create configuration file if not existing
 		if(!configFile.exists())
 		{
 			boolean success = settings.createConfigFile();
