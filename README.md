@@ -1,16 +1,14 @@
 ![Logo](http://i.imgur.com/mqn4TON.png)
 
-[![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8%20%26%201.12.1-orange.svg)](https://minecraft.net)
+[![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8.8%20%26%201.12.1--1-orange.svg)](https://minecraft.net)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/mit-license.html)
-[![Modules](https://img.shields.io/badge/Modules-6-yellow.svg)](https://github.com/xTACTIXzZ/Hydrazine/wiki/Module-list)
+[![Modules](https://img.shields.io/badge/Modules-10-yellow)](https://github.com/xTACTIXzZ/Hydrazine/wiki/Module-list)
 [![Status](https://img.shields.io/badge/Status-Beta-red.svg)](http://i.investopedia.com/dimages/graphics/beta03.png)
-[![ProgVer](https://img.shields.io/badge/Program%20version-1.0-blue.svg)](https://github.com/xTACTIXzZ/Hydrazine)
+[![ProgVer](https://img.shields.io/badge/Program%20version-1.1-blue.svg)](https://github.com/xTACTIXzZ/Hydrazine)
 
 
 
-***This project is unfinished and not complete yet!***
-
-Hydrazine is a command-line based, modular program that uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10/MCProtocolLib)) to interact with a minecraft server. Its purpose is to check if the target is able to withstand a bot-based denial of service attack. Currently, the program supports *Minecraft 1.8 and 1.12.1*.
+Hydrazine is a command-line based, modular program that uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10/MCProtocolLib)) to interact with a minecraft server. Its purpose is to check if the target is able to withstand a bot-based denial of service attack. Currently, the program supports *Minecraft 1.8.8 and 1.12.1-1*.
 
 
 ## Features
