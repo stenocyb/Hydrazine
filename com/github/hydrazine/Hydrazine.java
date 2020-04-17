@@ -25,6 +25,7 @@ import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.module.builtin.MinecraftStatusModule;
 import com.github.hydrazine.module.builtin.PremiumFloodModule;
+import com.github.hydrazine.module.builtin.SkinStealerModule;
 import com.github.hydrazine.module.builtin.UUIDGrabModule;
 import com.github.hydrazine.util.Settings;
 
@@ -386,6 +387,9 @@ public class Hydrazine
 		
 		AltCheckerModule altCheckerM = new AltCheckerModule();
 		loadedModules.add(altCheckerM);
+		
+		SkinStealerModule skinStealerM = new SkinStealerModule();
+		loadedModules.add(skinStealerM);
 	}
 
 }
