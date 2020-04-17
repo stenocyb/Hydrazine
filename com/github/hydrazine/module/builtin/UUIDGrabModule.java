@@ -11,6 +11,13 @@ import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.FileFactory;
 
+/**
+ * 
+ * @author xTACTIXzZ
+ * 
+ * This module retrieves the uuid(s) of a given player name or list
+ *
+ */
 public class UUIDGrabModule implements Module
 {
 
@@ -29,7 +36,7 @@ public class UUIDGrabModule implements Module
 	@Override
 	public String getDescription()
 	{
-		return "Returns the UUID of a given player name.";
+		return "Returns the UUID(s) of a given player name or list. ";
 	}
 
 	@Override
