@@ -16,6 +16,7 @@ import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleManager;
 import com.github.hydrazine.module.ModuleSettings;
+import com.github.hydrazine.module.builtin.AltCheckerModule;
 import com.github.hydrazine.module.builtin.ChatModule;
 import com.github.hydrazine.module.builtin.ChatReaderModule;
 import com.github.hydrazine.module.builtin.ConsoleClientModule;
@@ -280,7 +281,7 @@ public class Hydrazine
 	 */
 	private static void listModules()
 	{
-		System.out.println(Hydrazine.infoPrefix + "Built-in modules:\n");
+		System.out.println(Hydrazine.infoPrefix + "Built-in modules (" + loadedModules.size() + "):\n");
 		
 		for(Module m : loadedModules)
 		{
@@ -382,6 +383,9 @@ public class Hydrazine
 		
 		UUIDGrabModule uuidGrabM = new UUIDGrabModule();
 		loadedModules.add(uuidGrabM);
+		
+		AltCheckerModule altCheckerM = new AltCheckerModule();
+		loadedModules.add(altCheckerM);
 	}
 
 }
