@@ -261,7 +261,7 @@ public class Hydrazine
 		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy used for authentication. Format: host:port (https)");
 		aProxyOpt.setArgName("proxy");
 		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy used to connect to a server. Format: host:port (socks)");
-		sProxyOpt.setArgName("proxy");
+		sProxyOpt.setArgName("proxy"); // TODO input file support
 
 		// Add options
 		options.addOption(hostOpt);
