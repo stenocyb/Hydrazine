@@ -1,12 +1,15 @@
 package com.github.hydrazine.minecraft;
 
+import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Random;
 
 import org.spacehq.mc.auth.exception.request.RequestException;
 import org.spacehq.mc.protocol.MinecraftProtocol;
 
 import com.github.hydrazine.Hydrazine;
+import com.github.hydrazine.util.FileFactory;
 import com.github.hydrazine.util.UsernameGenerator;
 
 /**
@@ -75,16 +78,36 @@ public class Authenticator
 		{
 			Proxy proxy = null;
 			
-			try
+			if(Hydrazine.settings.getSetting("authproxy").contains(":"))
 			{
-				String[] parts = Hydrazine.settings.getSetting("authproxy").split(":");
-				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(parts[0], Integer.parseInt(parts[1])));
+				try
+				{
+					String[] parts = Hydrazine.settings.getSetting("authproxy").split(":");
+					proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(parts[0], Integer.parseInt(parts[1])));
+				}
+				catch(Exception e)
+				{
+					System.out.println(Hydrazine.errorPrefix + "Invalid value for switch \'-ap\'");
+					
+					return null;
+				}
 			}
-			catch(Exception e)
+			else
 			{
-				System.out.println(Hydrazine.errorPrefix + "Invalid value for switch \'-ap\'");
+				File authFile = new File(Hydrazine.settings.getSetting("authproxy"));
 				
-				return null;
+				if(authFile.exists())
+				{
+					Random r = new Random();
+					FileFactory authFactory = new FileFactory(authFile);
+					proxy = authFactory.getProxies(Proxy.Type.SOCKS)[r.nextInt(authFactory.getProxies(Proxy.Type.SOCKS).length)];
+				}
+				else
+				{
+					System.out.println(Hydrazine.errorPrefix + "Invalid value for switch \'-ap\'");
+					
+					return null;
+				}
 			}
 			
 			return proxy;

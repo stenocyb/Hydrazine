@@ -2,13 +2,9 @@ package com.github.hydrazine.module.builtin;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.Proxy;
-import java.net.Proxy.Type;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Random;
-
 import org.spacehq.mc.protocol.MinecraftProtocol;
 
 import com.github.hydrazine.Hydrazine;
@@ -80,23 +76,19 @@ public class AltCheckerModule implements Module
 		{
 			File inputFile = new File(settings.getProperty("inputFile"));
 			FileFactory factory = new FileFactory(inputFile);
-			FileFactory proxyFactory;
-			Random r = new Random();
 			Credentials[] creds = factory.getCredentials();
 			
 			for(Credentials c : creds)
 			{
 				MinecraftProtocol mp;
 				
-				if(!Boolean.valueOf(settings.getProperty("useProxies")))
+				if(!Hydrazine.settings.hasSetting("ap"))
 				{
 					mp = auth.authenticate(c);
 				}
 				else
 				{
-					proxyFactory = new FileFactory(new File(settings.getProperty("proxyFile")));
-					Proxy p = proxyFactory.getProxies(Type.HTTP)[r.nextInt(proxyFactory.getProxies(Type.HTTP).length)];
-					mp = auth.authenticate(c, p);
+					mp = auth.authenticate(c, Authenticator.getAuthProxy());
 				}
 				
 				if(mp != null)
@@ -186,14 +178,7 @@ public class AltCheckerModule implements Module
 			settings.setProperty("inputFile", ModuleSettings.askUser("File path:"));
 			settings.setProperty("loginDelay", String.valueOf(ModuleSettings.askUser("Delay between login attempts (in milliseconds):")));
 		}
-		
-		settings.setProperty("useProxies", String.valueOf(ModuleSettings.askUserYesNo("Use proxies (https)?")));
-		
-		if(Boolean.valueOf(settings.getProperty("useProxies")))
-		{
-			settings.setProperty("proxyFile", ModuleSettings.askUser("File path:"));
-		}
-		
+				
 		settings.setProperty("outputToFile", String.valueOf(ModuleSettings.askUserYesNo("Output working accounts to file?")));
 		
 		if(Boolean.valueOf(settings.getProperty("outputToFile")))

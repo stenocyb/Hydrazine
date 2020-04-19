@@ -1,7 +1,10 @@
 package com.github.hydrazine.util;
 
+import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Random;
+
 import org.spacehq.mc.protocol.MinecraftProtocol;
 import org.spacehq.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import org.spacehq.packetlib.Client;
@@ -75,16 +78,36 @@ public class ConnectionHelper
 		{
 			Proxy proxy = null;
 			
-			try
+			if(Hydrazine.settings.getSetting("socksproxy").contains(":"))
 			{
-				String[] parts = Hydrazine.settings.getSetting("socksproxy").split(":");
-				proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(parts[0], Integer.parseInt(parts[1])));
+				try
+				{
+					String[] parts = Hydrazine.settings.getSetting("socksproxy").split(":");
+					proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(parts[0], Integer.parseInt(parts[1])));
+				}
+				catch(Exception e)
+				{
+					System.out.println(Hydrazine.errorPrefix + "Invalid value for switch -sp");
+					
+					return null;
+				}
 			}
-			catch(Exception e)
+			else
 			{
-				System.out.println(Hydrazine.errorPrefix + "Invalid value for switch -sp");
+				File socksFile = new File(Hydrazine.settings.getSetting("socksproxy"));
 				
-				return null;
+				if(socksFile.exists())
+				{
+					Random r = new Random();
+					FileFactory socksFactory = new FileFactory(socksFile);
+					proxy = socksFactory.getProxies(Proxy.Type.SOCKS)[r.nextInt(socksFactory.getProxies(Proxy.Type.SOCKS).length)];
+				}
+				else
+				{
+					System.out.println(Hydrazine.errorPrefix + "Invalid value for switch -sp");
+					
+					return null;
+				}
 			}
 			
 			Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory(proxy));
