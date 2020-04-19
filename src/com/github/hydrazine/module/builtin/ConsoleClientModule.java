@@ -87,9 +87,7 @@ public class ConsoleClientModule implements Module
 				doStuff(client, sc);
 			}
 			
-			sc.close();
-			
-			stop();
+			sc.close();			
 		}
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
@@ -120,9 +118,7 @@ public class ConsoleClientModule implements Module
 				doStuff(client, sc);
 			}
 			
-			sc.close();
-			
-			stop();
+			sc.close();			
 		}
 		// User forgot to pass the options
 		else
@@ -132,11 +128,12 @@ public class ConsoleClientModule implements Module
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
-		System.out.println("Goodbye, my friend!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
-
 	@Override
 	public void configure() 
 	{
@@ -214,13 +211,13 @@ public class ConsoleClientModule implements Module
 							String builder = line;
 								                		       
 							// Filter out color codes
-							if(builder.contains("ยง"))
+							if(builder.contains("ง"))
 							{
-								int count = builder.length() - builder.replace("ยง", "").length();
+								int count = builder.length() - builder.replace("ง", "").length();
 								
 								for(int i = 0; i < count; i++)
 								{
-									int index = builder.indexOf("ยง");
+									int index = builder.indexOf("ง");
 									
 									if(index > (-1)) // Check if index is invalid, happens sometimes.
 									{		
@@ -285,7 +282,7 @@ public class ConsoleClientModule implements Module
 			@Override
 			public void disconnected(DisconnectedEvent event) 
 			{
-				System.exit(1);
+				stop(event.getReason());
 			}
 		});
 	}

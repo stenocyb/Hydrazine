@@ -52,7 +52,14 @@ public class CrackedFloodModule implements Module
 	{
 		// Load settings
 		settings.load();
-				
+			
+		if(!Hydrazine.settings.hasSetting("host") || Hydrazine.settings.getSetting("host") == null)
+		{
+			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to attack (-h)");
+			
+			System.exit(1);
+		}
+		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
 		
 		server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
@@ -84,9 +91,7 @@ public class CrackedFloodModule implements Module
 			if(Hydrazine.settings.hasSetting("username"))
 			{
 				System.out.println(Hydrazine.infoPrefix + "You have only specified a single username. We need more in order to flood the server.");
-				System.out.println(Hydrazine.infoPrefix + "Configure this module to load usernames from a file OR use the -gu switch.");
-				
-				stop();				
+				System.out.println(Hydrazine.infoPrefix + "Configure this module to load usernames from a file OR use the -gu switch.");				
 			}
 			else
 			{
@@ -188,9 +193,11 @@ public class CrackedFloodModule implements Module
 	}
 
 	@Override
-	public void stop()
+	public void stop(String cause)
 	{
-		System.out.println("Module finished. Goodbye!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
 
 	@Override

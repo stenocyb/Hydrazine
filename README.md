@@ -2,24 +2,31 @@
 
 [![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8.8%20%26%201.12.1--1-orange.svg)](https://minecraft.net)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/mit-license.html)
-[![Modules](https://img.shields.io/badge/Modules-10-yellow)](https://github.com/xTACTIXzZ/Hydrazine/wiki/Module-list)
+[![Modules](https://img.shields.io/badge/Modules-11-yellow)](https://github.com/xTACTIXzZ/Hydrazine/wiki/Module-list)
 [![Status](https://img.shields.io/badge/Status-Beta-red.svg)](http://i.investopedia.com/dimages/graphics/beta03.png)
 [![ProgVer](https://img.shields.io/badge/Program%20version-1.1-blue.svg)](https://github.com/xTACTIXzZ/Hydrazine)
 
 
 
-Hydrazine is a command-line based, modular program that uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10/MCProtocolLib)) to interact with a minecraft server. Its purpose is to check if the target is able to withstand a bot-based denial of service attack. Currently, the program supports *Minecraft 1.8.8 and 1.12.1-1*.
+Hydrazine is a command-line based, modular program that uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10/MCProtocolLib)) to interact with a minecraft server. Its purpose is to check if the target is able to withstand a bot-based attack. Currently, the program supports *Minecraft 1.8.8 and 1.12.1-1*.
 
 
 ## Features
-* Cracked and Premium Server support
-* Authentication proxy support
-* Client proxy support (socks only)
-* Ability to load cracked usernames and account credentials from file
-* Delay between client connections (throttle delay)
-* Module support
-  * Default modules
-  * Custom / third party modules
+- Cracked and Premium Server support
+- Authentication proxy support
+- Client proxy support (socks5 only)
+### Modules
+* **info** - *Retrieves information about a minecraft server.*
+* **icongrab** - *This module grabs the icon from a server and saves it to your computer.*
+* **readchat** - *This module connects to a server and passively reads the chat.*
+* **chat** - *Lets you chat on a server.*
+* **cflood** - *Floods a cracked server with bots.*
+* **pflood** - *Floods a premium server with bots.*
+* **cclient** - *This module lets you send and receive chat messages.*
+* **status** - *Retrieves the status of all minecraft related services*
+* **uuid** - *Returns the UUID(s) of a given player name or list.*
+* **altchecker** - *Cycles through a list of accounts to check if they are able to log in. (Format: username/email:password)*
+* **skinstealer** - *Steals the skin of a player and saves it to your computer.*
 
 ## How to use Hydrazine
 [Tutorial](https://github.com/xTACTIXzZ/Hydrazine/wiki/How-to-use-Hydrazine)
