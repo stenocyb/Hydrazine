@@ -18,6 +18,13 @@ import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleSettings;
 
+/**
+ * 
+ * @author xTACTIXzZ
+ * 
+ * This module steals the skin of a minecraft player
+ *
+ */
 public class SkinStealerModule implements Module
 {
 
@@ -111,19 +118,19 @@ public class SkinStealerModule implements Module
 			uuid = uuid.replace("\"", "");
 			uuid = uuid.replace(" ", "");
 						
-            try 
-            {
+			try 
+			{
 				br.close();
 				capeUrl = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
 			} 
-            catch (IOException e) 
-            {
+			catch (IOException e) 
+			{
 				e.printStackTrace();
 				
 				System.exit(1);
 			}
 			
-            URLConnection connection2;
+			URLConnection connection2;
 			BufferedReader br2 = null;
 			String inputLine2 = null;
 			
@@ -154,37 +161,37 @@ public class SkinStealerModule implements Module
 				byte[] decodedValue = Base64.getDecoder().decode(base64Value);
 				String decodedText = null;
 				
-	            try 
-	            {
-					decodedText = new String(decodedValue, StandardCharsets.UTF_8.toString());
+			    try 
+			    {
+			    	decodedText = new String(decodedValue, StandardCharsets.UTF_8.toString());
 				} 
-	            catch (UnsupportedEncodingException e)
-	            {
-					e.printStackTrace();
+			    catch (UnsupportedEncodingException e)
+			    {
+			    	e.printStackTrace();
 					
-					System.exit(1);
+			    	System.exit(1);
 				} 
-	            	            
-	            String[] subParts = decodedText.split(",");
-	            
-	            for(String s : subParts)
-	            {
-	            	if(s.toLowerCase().contains("textures.minecraft.net"))
-	            	{
-	            		String[] subSubParts = s.split(":");
-	            		String rawUrl = subSubParts[subSubParts.length - 1];
-	            		
-	            		rawUrl = rawUrl.replace("}", "");
-	            		rawUrl = rawUrl.replace("\"", "");
-	            		rawUrl = "http:" + rawUrl;
-	            		
-	            		System.out.println(Hydrazine.infoPrefix + "Skin: " + rawUrl + "\n");
-	            		
-	            		BufferedImage image;
-	            		URL skinUrl;
-	            		
-	            		try 
-	            		{
+			    	            
+			    String[] subParts = decodedText.split(",");
+			    
+			    for(String s : subParts)
+			    {
+			    	if(s.toLowerCase().contains("textures.minecraft.net"))
+			    	{
+			    		String[] subSubParts = s.split(":");
+			    		String rawUrl = subSubParts[subSubParts.length - 1];
+			    		
+			    		rawUrl = rawUrl.replace("}", "");
+			    		rawUrl = rawUrl.replace("\"", "");
+			    		rawUrl = "http:" + rawUrl;
+			    		
+			    		System.out.println(Hydrazine.infoPrefix + "Skin: " + rawUrl + "\n");
+			    		
+			    		BufferedImage image;
+			    		URL skinUrl;
+			    		
+			    		try 
+			    		{
 							skinUrl = new URL(rawUrl);
 							image = ImageIO.read(skinUrl);
 							
@@ -192,18 +199,18 @@ public class SkinStealerModule implements Module
 				            
 				            System.out.println(Hydrazine.infoPrefix + "Saved skin to " + outputFile.getAbsolutePath());
 						} 
-	            		catch (Exception e) 
-	            		{
+			    		catch (Exception e) 
+			    		{
 							e.printStackTrace();
 							
 							System.exit(1);
 						}
-	            	}
-	            }
+			    	}
+			    }
 			}
 			else
 			{
-				System.out.println(Hydrazine.infoPrefix + username + " does not have a skin.");
+				System.out.println(Hydrazine.infoPrefix + username + " does not seem to have a skin.");
 			}
 		}
 		else
@@ -213,9 +220,11 @@ public class SkinStealerModule implements Module
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
 		
+		System.exit(0);
 	}
 
 	@Override

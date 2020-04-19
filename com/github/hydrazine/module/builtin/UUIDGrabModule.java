@@ -81,15 +81,11 @@ public class UUIDGrabModule implements Module
 					
 					System.out.println(username + ":" + uuid);
 					
-		            br.close();
-		            
-		            stop();
+		            br.close();		            
 				} 
 				catch (Exception e) 
-				{
-				    e.printStackTrace();
-				    
-				    stop();
+				{				    
+				    stop(e.toString());
 				}
 			}
 		}
@@ -122,15 +118,11 @@ public class UUIDGrabModule implements Module
 				
 				System.out.println(username + ":" + uuid);
 				
-	            br.close();
-	            
-	            stop();
+	            br.close();	            
 			} 
 			catch (Exception e) 
-			{
-			    e.printStackTrace();
-			    
-			    stop();
+			{			    
+			    stop(e.toString());
 			}
 		}
 		else
@@ -140,9 +132,11 @@ public class UUIDGrabModule implements Module
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
 		
+		System.exit(0);
 	}
 
 	@Override

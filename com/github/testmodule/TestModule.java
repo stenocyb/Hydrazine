@@ -25,13 +25,13 @@ public class TestModule implements Module
 	{
 		System.out.println(Hydrazine.infoPrefix + "Module started at " + new Date().toString());
 		
-		stop();
+		stop("finished");
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause) 
 	{
-		System.out.println(Hydrazine.infoPrefix + "Module stopped at " + new Date().toString());
+		System.out.println(Hydrazine.infoPrefix + "Module stopped at " + new Date().toString() + ": " + cause);
 	}
 
 	@Override

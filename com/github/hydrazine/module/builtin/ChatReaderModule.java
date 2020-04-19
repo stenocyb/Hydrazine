@@ -93,9 +93,7 @@ public class ChatReaderModule implements Module
 				}
 			}
 			
-			sc.close();
-			
-			stop();
+			sc.close();			
 		}
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
@@ -134,8 +132,6 @@ public class ChatReaderModule implements Module
 			}
 			
 			sc.close();
-			
-			stop();
 		}
 		// User forgot to pass the options
 		else
@@ -145,9 +141,11 @@ public class ChatReaderModule implements Module
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
-		System.out.println("Module stopped, bye!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
 
 	@Override

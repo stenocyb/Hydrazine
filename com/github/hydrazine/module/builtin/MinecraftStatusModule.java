@@ -32,7 +32,7 @@ public class MinecraftStatusModule implements Module
 	@Override
 	public String getDescription() 
 	{
-		return "This module retrieves the status of all minecraft related services";
+		return "Retrieves the status of all minecraft related services";
 	}
 	
 	@Override
@@ -102,22 +102,20 @@ public class MinecraftStatusModule implements Module
             	System.out.println("- [" + service + "]:	" + status);
             }
             
-            br.close();
-            
-            stop();
+            br.close();            
 		} 
 		catch (Exception e) 
-		{
-		    e.printStackTrace();
-		    
-		    stop();
+		{		    
+		    stop(e.toString());
 		}
 	}
 	
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
 		
+		System.exit(0);
 	}
 
 	@Override
