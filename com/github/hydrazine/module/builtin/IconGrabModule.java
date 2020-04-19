@@ -132,15 +132,15 @@ public class IconGrabModule implements Module
         
         System.out.println(Hydrazine.infoPrefix + "The icon has been saved to: " + outputFile.getAbsolutePath());
         
-        client.getSession().disconnect("Grabbed icon.");
-        
-        stop();
+        client.getSession().disconnect("finished.");
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Finished module. Goodbye!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
 
 	@Override

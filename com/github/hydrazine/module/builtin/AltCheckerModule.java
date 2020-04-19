@@ -2,9 +2,12 @@ package com.github.hydrazine.module.builtin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.spacehq.mc.protocol.MinecraftProtocol;
 
@@ -77,15 +80,37 @@ public class AltCheckerModule implements Module
 		{
 			File inputFile = new File(settings.getProperty("inputFile"));
 			FileFactory factory = new FileFactory(inputFile);
+			FileFactory proxyFactory;
+			Random r = new Random();
 			Credentials[] creds = factory.getCredentials();
 			
 			for(Credentials c : creds)
 			{
-				MinecraftProtocol mp = auth.authenticate(c);
+				MinecraftProtocol mp;
+				
+				if(!Boolean.valueOf(settings.getProperty("useProxies")))
+				{
+					mp = auth.authenticate(c);
+				}
+				else
+				{
+					proxyFactory = new FileFactory(new File(settings.getProperty("proxyFile")));
+					Proxy p = proxyFactory.getProxies(Type.HTTP)[r.nextInt(proxyFactory.getProxies(Type.HTTP).length)];
+					mp = auth.authenticate(c, p);
+				}
 				
 				if(mp != null)
 				{
 					validCredentials.add(c);
+				}
+				
+				try 
+				{
+					Thread.sleep(Long.valueOf(settings.getProperty("loginDelay")));
+				} 
+				catch (NumberFormatException | InterruptedException e)
+				{
+					stop(e.toString());
 				}
 			}
 			
@@ -144,9 +169,11 @@ public class AltCheckerModule implements Module
 	}
 
 	@Override
-	public void stop()
+	public void stop(String cause)
 	{
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
 		
+		System.exit(0);
 	}
 
 	@Override
@@ -157,6 +184,14 @@ public class AltCheckerModule implements Module
 		if(Boolean.valueOf(settings.getProperty("loadFromFile")))
 		{
 			settings.setProperty("inputFile", ModuleSettings.askUser("File path:"));
+			settings.setProperty("loginDelay", String.valueOf(ModuleSettings.askUser("Delay between login attempts (in milliseconds):")));
+		}
+		
+		settings.setProperty("useProxies", String.valueOf(ModuleSettings.askUserYesNo("Use proxies (https)?")));
+		
+		if(Boolean.valueOf(settings.getProperty("useProxies")))
+		{
+			settings.setProperty("proxyFile", ModuleSettings.askUser("File path:"));
 		}
 		
 		settings.setProperty("outputToFile", String.valueOf(ModuleSettings.askUserYesNo("Output working accounts to file?")));

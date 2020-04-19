@@ -19,6 +19,13 @@ import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
 import com.github.hydrazine.util.FileFactory;
 
+/**
+ * 
+ * @author xTACTIXzZ
+ * 
+ * This module floods a premium server with alt accounts
+ *
+ */
 public class PremiumFloodModule implements Module
 {
 	// Create new file where the configuration will be stored (Same folder as jar file)
@@ -162,9 +169,11 @@ public class PremiumFloodModule implements Module
 	}
 
 	@Override
-	public void stop()
+	public void stop(String cause)
 	{
-		System.out.println("Module finished. Goodbye!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
 
 	@Override

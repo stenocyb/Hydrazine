@@ -92,9 +92,7 @@ public class CrackedFloodModule implements Module
 			if(Hydrazine.settings.hasSetting("username"))
 			{
 				System.out.println(Hydrazine.infoPrefix + "You have only specified a single username. We need more in order to flood the server.");
-				System.out.println(Hydrazine.infoPrefix + "Configure this module to load usernames from a file OR use the -gu switch.");
-				
-				stop();				
+				System.out.println(Hydrazine.infoPrefix + "Configure this module to load usernames from a file OR use the -gu switch.");				
 			}
 			else
 			{
@@ -196,9 +194,11 @@ public class CrackedFloodModule implements Module
 	}
 
 	@Override
-	public void stop()
+	public void stop(String cause)
 	{
-		System.out.println("Module finished. Goodbye!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
 
 	@Override

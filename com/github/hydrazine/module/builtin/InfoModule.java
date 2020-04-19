@@ -36,7 +36,7 @@ public class InfoModule implements Module
 	@Override
 	public String getDescription() 
 	{
-		return "This module retrieves information about a minecraft server.";
+		return "Retrieves information about a minecraft server.";
 	}
 	
 	@Override
@@ -99,14 +99,14 @@ public class InfoModule implements Module
         }
         
         client.getSession().disconnect(Hydrazine.infoPrefix + "Retrieved server information.");
-        
-        stop();
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Finished module. Goodbye!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
 
 	@Override

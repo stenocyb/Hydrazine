@@ -39,7 +39,7 @@ public class Authenticator
 		} 
 		catch (RequestException e) 
 		{
-			System.out.println(Hydrazine.errorPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword());	
+			System.out.println(Hydrazine.errorPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword());
 		}
 		
 		return protocol;
@@ -60,7 +60,7 @@ public class Authenticator
 		} 
 		catch (RequestException e) 
 		{
-			System.out.println(Hydrazine.errorPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword() + "!");	
+			System.out.println(Hydrazine.errorPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword());	
 		}
 		
 		return protocol;

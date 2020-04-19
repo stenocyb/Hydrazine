@@ -42,7 +42,7 @@ public class ChatModule implements Module
 	@Override
 	public String getDescription() 
 	{
-		return "This module lets you chat on a server.";
+		return "Lets you chat on a server.";
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class ChatModule implements Module
 		{
 			System.out.println(Hydrazine.errorPrefix + "You have to specify a server to attack (-h)");
 			
-			System.exit(1);
+			return;
 		}
 		
 		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
@@ -84,8 +84,6 @@ public class ChatModule implements Module
 			}
 			
 			sc.close();
-			
-			stop();
 		}
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
@@ -116,9 +114,7 @@ public class ChatModule implements Module
 				doStuff(client, sc);
 			}
 			
-			sc.close();
-			
-			stop();
+			sc.close();			
 		}
 		// User forgot to pass the options
 		else
@@ -128,9 +124,11 @@ public class ChatModule implements Module
 	}
 
 	@Override
-	public void stop() 
+	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Module finished, bye bye!");
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		
+		System.exit(0);
 	}
 
 	@Override
@@ -183,7 +181,7 @@ public class ChatModule implements Module
 			@Override
 			public void disconnected(DisconnectedEvent event) 
 			{
-				System.exit(1);
+				stop(event.getReason());
 			}
 		});
 	}
