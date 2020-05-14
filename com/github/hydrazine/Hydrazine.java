@@ -25,6 +25,7 @@ import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.module.builtin.MinecraftStatusModule;
 import com.github.hydrazine.module.builtin.PremiumFloodModule;
+import com.github.hydrazine.module.builtin.ProxyCheckerModule;
 import com.github.hydrazine.module.builtin.SkinStealerModule;
 import com.github.hydrazine.module.builtin.UUIDGrabModule;
 import com.github.hydrazine.util.Settings;
@@ -259,10 +260,10 @@ public class Hydrazine
 		usrOpt.setArgName("name");
 		Option accOpt = new Option("cr", "credentials", true, "Credentials of a minecraft account. (Format: username/email:password)");
 		accOpt.setArgName("creds");
-		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy used for authentication. Format: host:port (https)");
+		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy or a file containing proxies, used for authentication. Format: host:port (https)");
 		aProxyOpt.setArgName("proxy");
-		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy used to connect to a server. Format: host:port (socks)");
-		sProxyOpt.setArgName("proxy"); // TODO input file support
+		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy or a file containing proxies, used to connect to a server. Format: host:port (socks)");
+		sProxyOpt.setArgName("proxy");
 
 		// Add options
 		options.addOption(hostOpt);
@@ -390,6 +391,9 @@ public class Hydrazine
 		
 		SkinStealerModule skinStealerM = new SkinStealerModule();
 		loadedModules.add(skinStealerM);
+		
+		ProxyCheckerModule proxyCheckerM = new ProxyCheckerModule();
+		loadedModules.add(proxyCheckerM);
 	}
 
 }
