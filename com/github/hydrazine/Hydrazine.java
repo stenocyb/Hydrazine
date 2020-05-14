@@ -123,7 +123,7 @@ public class Hydrazine
 		Server server = new Server(cmd.getOptionValue('h'), 25565);
 		
 		// Validating options
-		if(cmd.hasOption('p'))
+		if(cmd.hasOption('p')) 
 		{
 			int port = 25565;
 			
