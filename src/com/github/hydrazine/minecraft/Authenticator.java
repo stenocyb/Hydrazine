@@ -34,14 +34,14 @@ public class Authenticator
 	public MinecraftProtocol authenticate(Credentials creds, Proxy proxy)
 	{
 		MinecraftProtocol protocol = null;
-		
+				
 		try 
 		{
 			protocol = new MinecraftProtocol(creds.getUsername(), creds.getPassword(), false, proxy);
 		} 
 		catch (RequestException e) 
 		{
-			System.out.println(Hydrazine.errorPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword());
+			System.out.println(Hydrazine.errorPrefix + "Could not authenticate " + creds.getUsername() + ":" + creds.getPassword() + " | " + e.getMessage());
 		}
 		
 		return protocol;
@@ -99,7 +99,7 @@ public class Authenticator
 				{
 					Random r = new Random();
 					FileFactory authFactory = new FileFactory(authFile);
-					proxy = authFactory.getProxies(Proxy.Type.SOCKS)[r.nextInt(authFactory.getProxies(Proxy.Type.SOCKS).length)];
+					proxy = authFactory.getProxies(Proxy.Type.HTTP)[r.nextInt(authFactory.getProxies(Proxy.Type.HTTP).length)];
 				}
 				else
 				{
@@ -170,4 +170,3 @@ public class Authenticator
 	}
 
 }
-
