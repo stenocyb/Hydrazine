@@ -1,6 +1,7 @@
 package com.github.hydrazine.module.builtin;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -86,7 +87,19 @@ public class IconGrabModule implements Module
             @Override
             public void handle(Session session, ServerStatusInfo info) 
             {
-            	BufferedImage icon = info.getIcon();
+            	byte[] iconBytes = info.getIconPng();
+            	ByteArrayInputStream bais = new ByteArrayInputStream(iconBytes);
+            	BufferedImage icon;
+
+                try 
+                {
+                    icon = ImageIO.read(bais);
+                } 
+                catch (IOException e) 
+                {
+                    throw new RuntimeException(e);
+                }
+            	
             	BufferedImage newIcon = new BufferedImage(icon.getWidth(), icon.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
             	
             	for(int i = 0; i < icon.getWidth(); i++)
