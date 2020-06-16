@@ -10,6 +10,8 @@ import com.github.hydrazine.minecraft.Server;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
 import com.github.steveice10.packetlib.Client;
+import com.github.steveice10.packetlib.ProxyInfo;
+import com.github.steveice10.packetlib.ProxyInfo.Type;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
 import com.github.steveice10.packetlib.event.session.DisconnectedEvent;
 import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
@@ -109,7 +111,7 @@ public class ConnectionHelper
 				}
 			}
 			
-			Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory(proxy));
+			Client client = new Client(server.getHost(), server.getPort(), protocol, new TcpSessionFactory(new ProxyInfo(Type.SOCKS5, proxy.address())));
 			
 			registerDefaultListeners(client);
 						
