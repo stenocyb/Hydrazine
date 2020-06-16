@@ -1,6 +1,8 @@
 package com.github.hydrazine.minecraft;
 
 import java.io.File;
+
+
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Random;
@@ -37,7 +39,7 @@ public class Authenticator
 		
 		try 
 		{
-			protocol = new MinecraftProtocol(creds.getUsername(), creds.getPassword(), false, proxy);
+			protocol = new MinecraftProtocol(creds.getUsername(), creds.getPassword(), proxy);
 		} 
 		catch (RequestException e) 
 		{
@@ -58,7 +60,7 @@ public class Authenticator
 		
 		try 
 		{
-			protocol = new MinecraftProtocol(creds.getUsername(), creds.getPassword(), false);
+			protocol = new MinecraftProtocol(creds.getUsername(), creds.getPassword());
 		} 
 		catch (RequestException e) 
 		{
