@@ -154,6 +154,7 @@ public class ChatModule implements Module
 		}
 		
 		settings.setProperty("sendDelay", ModuleSettings.askUser("Delay between sending messages: "));
+		settings.setProperty("reconnect", String.valueOf(ModuleSettings.askUserYesNo("Reconnect automatically?")));
 		
 		// Store configuration variables
 		settings.store();
@@ -181,7 +182,25 @@ public class ChatModule implements Module
 			@Override
 			public void disconnected(DisconnectedEvent event) 
 			{
-				stop(event.getReason());
+				if(settings.getProperty("reconnect").equals("true"))
+				{
+					try 
+					{
+						Thread.sleep(3000);
+					} 
+					catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					}
+					
+					client.getSession().connect();
+					
+					return;
+				}
+				else
+				{
+					stop(event.getReason());
+				}
 			}
 		});
 	}
