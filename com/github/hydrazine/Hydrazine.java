@@ -63,6 +63,8 @@ public class Hydrazine
 	 */
 	public static void main(String[] args)
 	{
+		Runtime.getRuntime().addShutdownHook(new ShutDownThread());
+		
 		System.out.println("      _    _           _               _            ");
 		System.out.println("     | |  | |         | |             (_)           ");
 		System.out.println("     | |__| |_   _  __| |_ __ __ _ _____ _ __   ___ ");
@@ -185,12 +187,26 @@ public class Hydrazine
 						
 						if(answer)
 						{							
-							m.start();
+							try
+							{
+								m.start();
+							}
+							catch(Exception e)
+							{
+								
+							}
 						}
 					}
 					else // Start module if '-c' switch is not present
 					{
-						m.start();				
+						try
+						{
+							m.start();
+						}
+						catch(Exception e)
+						{
+							
+						}
 					}
 						
 					foundModule = true;
@@ -396,4 +412,12 @@ public class Hydrazine
 		loadedModules.add(proxyCheckerM);
 	}
 
+}
+
+class ShutDownThread extends Thread 
+{
+	public void run()
+	{
+		System.out.println("Bye bye...");
+	}
 }
