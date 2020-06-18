@@ -61,6 +61,8 @@ public class Hydrazine
 	 */
 	public static void main(String[] args)
 	{
+		Runtime.getRuntime().addShutdownHook(new ShutDownThread());
+		
 		System.out.println("      _    _           _               _            ");
 		System.out.println("     | |  | |         | |             (_)           ");
 		System.out.println("     | |__| |_   _  __| |_ __ __ _ _____ _ __   ___ ");
@@ -183,12 +185,26 @@ public class Hydrazine
 						
 						if(answer)
 						{							
-							m.start();
+							try
+							{
+								m.start();
+							}
+							catch(Exception e)
+							{
+								
+							}
 						}
 					}
 					else // Start module if '-c' switch is not present
 					{
-						m.start();				
+						try
+						{
+							m.start();
+						}
+						catch(Exception e)
+						{
+							
+						}				
 					}
 						
 					foundModule = true;
@@ -261,7 +277,7 @@ public class Hydrazine
 		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy used for authentication. Format: host:port (https)");
 		aProxyOpt.setArgName("proxy");
 		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy used to connect to a server. Format: host:port (socks)");
-		sProxyOpt.setArgName("proxy"); // TODO input file support
+		sProxyOpt.setArgName("proxy");
 
 		// Add options
 		options.addOption(hostOpt);
@@ -391,4 +407,12 @@ public class Hydrazine
 		loadedModules.add(skinStealerM);
 	}
 
+}
+
+class ShutDownThread extends Thread 
+{
+	public void run()
+	{
+		// System.out.println("Bye bye...");
+	}
 }
