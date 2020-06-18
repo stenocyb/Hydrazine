@@ -1,6 +1,6 @@
 ![Logo](http://i.imgur.com/mqn4TON.png)
 
-[![MCVersion](https://img.shields.io/badge/Minecraft%20version-1.8.8%20%26%201.12.1--1-orange.svg)](https://minecraft.net)
+[![MCVersion](https://img.shields.io/badge/Minecraft%20Version-1.8%2C%201.12%20%26%201.15-important)](https://minecraft.net)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/mit-license.html)
 [![Modules](https://img.shields.io/badge/Modules-11-yellow)](https://github.com/xTACTIXzZ/Hydrazine/wiki/Module-list)
 [![Status](https://img.shields.io/badge/Status-Beta-red.svg)](http://i.investopedia.com/dimages/graphics/beta03.png)
@@ -27,6 +27,7 @@ Hydrazine is a command-line based, modular program that uses MCProtocolLib by St
 * **uuid** - *Returns the UUID(s) of a given player name or list.*
 * **altchecker** - *Cycles through a list of accounts to check if they are able to log in. (Format: username/email:password)*
 * **skinstealer** - *Steals the skin of a player and saves it to your computer.*
+* **proxychecker** - *Checks the online status of the proxies supplied by '-ap' or '-sp'. (slow)*
 
 ## How to use Hydrazine
 [Tutorial](https://github.com/xTACTIXzZ/Hydrazine/wiki/How-to-use-Hydrazine)
