@@ -2,7 +2,6 @@ package com.github.hydrazine.module.builtin;
 
 import java.io.File;
 import java.net.Proxy;
-import java.util.Scanner;
 
 import com.github.hydrazine.Hydrazine;
 import com.github.hydrazine.minecraft.Authenticator;
@@ -32,13 +31,13 @@ import com.github.steveice10.packetlib.event.session.SessionAdapter;
 public class ChatReaderModule implements Module
 {
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getName() + ".conf");
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getModuleName() + ".conf");
 	
 	// Configuration settings are stored in here	
 	private ModuleSettings settings = new ModuleSettings(configFile);
 	
 	@Override
-	public String getName() 
+	public String getModuleName() 
 	{
 		return "readchat";
 	}
@@ -62,10 +61,8 @@ public class ChatReaderModule implements Module
 			System.exit(1);
 		}
 		
-		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
-		
-		Scanner sc = new Scanner(System.in);
-		
+		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getModuleName() + "\'. Press CTRL + C to exit.");
+				
 		Authenticator auth = new Authenticator();
 		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
 		
@@ -90,28 +87,56 @@ public class ChatReaderModule implements Module
 				{
 					e.printStackTrace();
 				}
-			}
+			}	
 			
-			sc.close();			
+			if(!settings.getProperty("reconnect").equals("false"))
+			{
+				client.getSession().disconnect("");
+				
+				try 
+				{
+					Thread.sleep(1500);
+				} 
+				catch (InterruptedException e) 
+				{
+					e.printStackTrace();
+				}
+				
+				client = ConnectionHelper.connect(protocol, server);
+				registerListeners(client);
+				
+				while(client.getSession().isConnected())
+				{
+					try 
+					{
+						Thread.sleep(20);
+					} 
+					catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		// Server has offline mode disabled
 		else if(Hydrazine.settings.hasSetting("credentials"))
 		{
 		    Credentials creds = Authenticator.getCredentials();
 			Client client = null;
+			MinecraftProtocol protocol = null;
 			
 			// Check if auth proxy should be used
 			if(Hydrazine.settings.hasSetting("authproxy"))
 			{
 				Proxy proxy = Authenticator.getAuthProxy();
 				
-				MinecraftProtocol protocol = auth.authenticate(creds, proxy);
+				protocol = auth.authenticate(creds, proxy);
 				
 				client = ConnectionHelper.connect(protocol, server);
 			}
 			else
 			{				
-				MinecraftProtocol protocol = auth.authenticate(creds);
+				protocol = auth.authenticate(creds);
 				
 				client = ConnectionHelper.connect(protocol, server);
 			}
@@ -130,7 +155,34 @@ public class ChatReaderModule implements Module
 				}
 			}
 			
-			sc.close();
+			if(!settings.getProperty("reconnect").equals("false"))
+			{
+				client.getSession().disconnect("");
+				
+				try 
+				{
+					Thread.sleep(1500);
+				} 
+				catch (InterruptedException e) 
+				{
+					e.printStackTrace();
+				}
+				
+				client = ConnectionHelper.connect(protocol, server);
+				registerListeners(client);
+				
+				while(client.getSession().isConnected())
+				{
+					try 
+					{
+						Thread.sleep(20);
+					} 
+					catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		// User forgot to pass the options
 		else
@@ -142,7 +194,7 @@ public class ChatReaderModule implements Module
 	@Override
 	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
 		
 		System.exit(0);
 	}
@@ -154,6 +206,7 @@ public class ChatReaderModule implements Module
 		settings.setProperty("loginCommand", ModuleSettings.askUser("Enter login command: "));
 		settings.setProperty("commandDelay", ModuleSettings.askUser("Enter the delay between the commands in milliseconds: "));
 		settings.setProperty("filterColorCodes", String.valueOf(ModuleSettings.askUserYesNo("Filter color codes?")));
+		settings.setProperty("reconnect", String.valueOf(ModuleSettings.askUserYesNo("Reconnect automatically?")));
 		
 		// Create configuration file if not existing
 		if(!configFile.exists())
@@ -258,13 +311,13 @@ public class ChatReaderModule implements Module
 							String builder = line;
 								                		       
 							// Filter out color codes
-							if(builder.contains("ยง"))
+							if(builder.contains("ง"))
 							{
-								int count = builder.length() - builder.replace("ยง", "").length();
+								int count = builder.length() - builder.replace("ง", "").length();
 								
 								for(int i = 0; i < count; i++)
 								{
-									int index = builder.indexOf("ยง");
+									int index = builder.indexOf("ง");
 									
 									if(index > (-1)) // Check if index is invalid, happens sometimes.
 									{		
@@ -329,8 +382,21 @@ public class ChatReaderModule implements Module
 			@Override
 			public void disconnected(DisconnectedEvent event) 
 			{
-				System.exit(1);
+				if(settings.getProperty("reconnect").equals("false"))
+				{					
+					stop(event.getReason());
+				}
+				else
+				{			
+					start();
+				}
 			}
 		});
+	}
+
+	@Override
+	public void run()
+	{
+		start();
 	}
 }

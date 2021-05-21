@@ -27,7 +27,7 @@ public class InfoModule implements Module
 	private int hasRetrieved = 0;
 	
 	@Override
-	public String getName() 
+	public String getModuleName() 
 	{
 		return "info";
 	}
@@ -103,7 +103,7 @@ public class InfoModule implements Module
 	@Override
 	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
 		
 		System.exit(0);
 	}
@@ -113,4 +113,11 @@ public class InfoModule implements Module
 	{
 		System.out.println(Hydrazine.infoPrefix + "This module can't be configured.");
 	}
+
+	@Override
+	public void run() 
+	{
+		start();
+	}
+	
 }

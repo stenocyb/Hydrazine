@@ -32,7 +32,7 @@ public class IconGrabModule implements Module
 	private boolean hasRetrieved = false;
 	
 	@Override
-	public String getName() 
+	public String getModuleName() 
 	{
 		return "icongrab";
 	}
@@ -137,7 +137,7 @@ public class IconGrabModule implements Module
 	@Override
 	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
 		
 		System.exit(0);
 	}
@@ -148,4 +148,10 @@ public class IconGrabModule implements Module
 		System.out.println(Hydrazine.infoPrefix + "This module can't be configured.");
 	}
 
+	@Override
+	public void run() 
+	{
+		start();
+	}
+	
 }
