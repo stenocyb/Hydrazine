@@ -30,6 +30,7 @@ import com.github.hydrazine.module.builtin.SkinStealerModule;
 import com.github.hydrazine.module.builtin.UUIDGrabModule;
 import com.github.hydrazine.util.Settings;
 
+
 /**
  * 
  * @author xTACTIXzZ
@@ -57,12 +58,18 @@ public class Hydrazine
 	// Loaded modules
 	public static ArrayList<Module> loadedModules = new ArrayList<Module>();
 	
+	// Current module
+	public static Module currentModule = null;
+	
+	// Arguments
+	public static String[] arguments = null;
 	/*
 	 * Where everything begins...
 	 */
 	public static void main(String[] args)
 	{
 		Runtime.getRuntime().addShutdownHook(new ShutDownThread());
+		arguments = args; 
 		
 		System.out.println("      _    _           _               _            ");
 		System.out.println("     | |  | |         | |             (_)           ");
@@ -176,19 +183,21 @@ public class Hydrazine
 			
 			for(Module m : loadedModules)
 			{
-				if(m.getName().equalsIgnoreCase(settings.getSetting("module")))
+				if(m.getModuleName().equalsIgnoreCase(settings.getSetting("module")))
 				{
 					if(cmd.hasOption('c')) // Configure module if '-c' switch is present
 					{
 						m.configure();
 						
-						boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getName() + "\'?");
+						boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getModuleName() + "\'?");
 						
 						if(answer)
 						{							
 							try
 							{
-								m.start();
+								currentModule = m;
+								
+								m.run();
 							}
 							catch(Exception e)
 							{
@@ -200,12 +209,14 @@ public class Hydrazine
 					{
 						try
 						{
-							m.start();
+							currentModule = m;
+							
+							m.run();
 						}
 						catch(Exception e)
 						{
 							
-						}			
+						}
 					}
 						
 					foundModule = true;
@@ -238,16 +249,20 @@ public class Hydrazine
 				{
 					m.configure();
 					
-					boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getName() + "\'?");
+					boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getModuleName() + "\'?");
 					
 					if(answer)
 					{
-						m.start();
+						currentModule = m;
+						
+						m.run();
 					}
 				}
 				else // Start module if '-c' switch is not present
 				{
-					m.start();
+					currentModule = m;
+					
+					m.run();
 				}
 			}
 		}		
@@ -302,7 +317,7 @@ public class Hydrazine
 		
 		for(Module m : loadedModules)
 		{
-			System.out.println("> " + m.getName() + " - " + m.getDescription());
+			System.out.println("> " + m.getModuleName() + " - " + m.getDescription());
 		}
 		
 		System.out.println("\n" + Hydrazine.infoPrefix + "To run an external module, please specify the path of the jar file by using the switch \"-m\"");
