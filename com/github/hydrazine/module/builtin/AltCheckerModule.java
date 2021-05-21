@@ -18,7 +18,7 @@ public class AltCheckerModule implements Module
 {
 
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getName() + ".conf");
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getModuleName() + ".conf");
 	
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
@@ -30,7 +30,7 @@ public class AltCheckerModule implements Module
 	private File outputFile;
 	
 	@Override
-	public String getName()
+	public String getModuleName()
 	{
 		return "altchecker";
 	}
@@ -163,7 +163,7 @@ public class AltCheckerModule implements Module
 	@Override
 	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
 		
 		System.exit(0);
 	}
@@ -198,6 +198,12 @@ public class AltCheckerModule implements Module
 		
 		// Store configuration variables
 		settings.store();
+	}
+
+	@Override
+	public void run() 
+	{
+		start();
 	}
 
 }
