@@ -8,7 +8,7 @@
 
 
 
-Hydrazine is a command-line based, modular program that uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10/MCProtocolLib)) to interact with a minecraft server. Its purpose is to check if the target is able to withstand a bot-based attack. Currently, the program supports *Minecraft 1.8.8 and 1.12.1-1*.
+Hydrazine is a command-line based, modular program that uses MCProtocolLib by Steveice10 ([link](https://github.com/Steveice10/MCProtocolLib)) to interact with a minecraft server. Its purpose is to check if the target is able to withstand a bot-based attack. Currently, the program supports *Minecraft 1.8.8, 1.12.1-1 and 1.15.2*.
 
 
 ## Features
