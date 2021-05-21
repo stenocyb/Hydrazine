@@ -15,7 +15,7 @@ public class TestModule implements Module
 	}
 	
 	@Override
-	public String getName() 
+	public String getModuleName() 
 	{
 		return "testmodule";
 	}
@@ -38,6 +38,12 @@ public class TestModule implements Module
 	public void configure() 
 	{
 		System.out.println("Nothing to configure here.");
+	}
+
+	@Override
+	public void run() 
+	{
+		start();
 	}
 
 }

@@ -29,7 +29,7 @@ import com.github.hydrazine.util.FileFactory;
 public class CrackedFloodModule implements Module
 {
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getName() + ".conf");
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getModuleName() + ".conf");
 	
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
@@ -37,7 +37,7 @@ public class CrackedFloodModule implements Module
 	private Server server;
 	
 	@Override
-	public String getName() 
+	public String getModuleName() 
 	{
 		return "cflood";
 	}
@@ -61,7 +61,7 @@ public class CrackedFloodModule implements Module
 			System.exit(1);
 		}
 		
-		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
+		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getModuleName() + "\'. Press CTRL + C to exit.");
 		
 		server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
 		
@@ -196,7 +196,7 @@ public class CrackedFloodModule implements Module
 	@Override
 	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
 		
 		System.exit(0);
 	}
@@ -338,5 +338,11 @@ public class CrackedFloodModule implements Module
 				}
 			}
 		});
+	}
+
+	@Override
+	public void run() 
+	{
+		start();
 	}
 }
