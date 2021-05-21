@@ -25,9 +25,11 @@ import com.github.hydrazine.module.builtin.IconGrabModule;
 import com.github.hydrazine.module.builtin.InfoModule;
 import com.github.hydrazine.module.builtin.MinecraftStatusModule;
 import com.github.hydrazine.module.builtin.PremiumFloodModule;
+import com.github.hydrazine.module.builtin.ProxyCheckerModule;
 import com.github.hydrazine.module.builtin.SkinStealerModule;
 import com.github.hydrazine.module.builtin.UUIDGrabModule;
 import com.github.hydrazine.util.Settings;
+
 
 /**
  * 
@@ -56,12 +58,18 @@ public class Hydrazine
 	// Loaded modules
 	public static ArrayList<Module> loadedModules = new ArrayList<Module>();
 	
+	// Current module
+	public static Module currentModule = null;
+	
+	// Arguments
+	public static String[] arguments = null;
 	/*
 	 * Where everything begins...
 	 */
 	public static void main(String[] args)
 	{
 		Runtime.getRuntime().addShutdownHook(new ShutDownThread());
+		arguments = args; 
 		
 		System.out.println("      _    _           _               _            ");
 		System.out.println("     | |  | |         | |             (_)           ");
@@ -123,7 +131,7 @@ public class Hydrazine
 		Server server = new Server(cmd.getOptionValue('h'), 25565);
 		
 		// Validating options
-		if(cmd.hasOption('p'))
+		if(cmd.hasOption('p')) 
 		{
 			int port = 25565;
 			
@@ -175,19 +183,21 @@ public class Hydrazine
 			
 			for(Module m : loadedModules)
 			{
-				if(m.getName().equalsIgnoreCase(settings.getSetting("module")))
+				if(m.getModuleName().equalsIgnoreCase(settings.getSetting("module")))
 				{
 					if(cmd.hasOption('c')) // Configure module if '-c' switch is present
 					{
 						m.configure();
 						
-						boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getName() + "\'?");
+						boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getModuleName() + "\'?");
 						
 						if(answer)
 						{							
 							try
 							{
-								m.start();
+								currentModule = m;
+								
+								m.run();
 							}
 							catch(Exception e)
 							{
@@ -199,12 +209,14 @@ public class Hydrazine
 					{
 						try
 						{
-							m.start();
+							currentModule = m;
+							
+							m.run();
 						}
 						catch(Exception e)
 						{
 							
-						}				
+						}
 					}
 						
 					foundModule = true;
@@ -237,16 +249,20 @@ public class Hydrazine
 				{
 					m.configure();
 					
-					boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getName() + "\'?");
+					boolean answer = ModuleSettings.askUserYesNo("Start module \'" + m.getModuleName() + "\'?");
 					
 					if(answer)
 					{
-						m.start();
+						currentModule = m;
+						
+						m.run();
 					}
 				}
 				else // Start module if '-c' switch is not present
 				{
-					m.start();
+					currentModule = m;
+					
+					m.run();
 				}
 			}
 		}		
@@ -274,9 +290,9 @@ public class Hydrazine
 		usrOpt.setArgName("name");
 		Option accOpt = new Option("cr", "credentials", true, "Credentials of a minecraft account. (Format: username/email:password)");
 		accOpt.setArgName("creds");
-		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy used for authentication. Format: host:port (https)");
+		Option aProxyOpt = new Option("ap", "auth-proxy", true, "A proxy or a file containing proxies, used for authentication. Format: host:port (https)");
 		aProxyOpt.setArgName("proxy");
-		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy used to connect to a server. Format: host:port (socks)");
+		Option sProxyOpt = new Option("sp", "socks-proxy", true, "A proxy or a file containing proxies, used to connect to a server. Format: host:port (socks)");
 		sProxyOpt.setArgName("proxy");
 
 		// Add options
@@ -301,7 +317,7 @@ public class Hydrazine
 		
 		for(Module m : loadedModules)
 		{
-			System.out.println("> " + m.getName() + " - " + m.getDescription());
+			System.out.println("> " + m.getModuleName() + " - " + m.getDescription());
 		}
 		
 		System.out.println("\n" + Hydrazine.infoPrefix + "To run an external module, please specify the path of the jar file by using the switch \"-m\"");
@@ -405,6 +421,9 @@ public class Hydrazine
 		
 		SkinStealerModule skinStealerM = new SkinStealerModule();
 		loadedModules.add(skinStealerM);
+		
+		ProxyCheckerModule proxyCheckerM = new ProxyCheckerModule();
+		loadedModules.add(proxyCheckerM);
 	}
 
 }
@@ -413,6 +432,6 @@ class ShutDownThread extends Thread
 {
 	public void run()
 	{
-		// System.out.println("Bye bye...");
+		//System.out.println("Bye bye...");
 	}
 }

@@ -1,6 +1,7 @@
 package com.github.hydrazine.module.builtin;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.Proxy;
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ import com.github.hydrazine.minecraft.Server;
 import com.github.hydrazine.module.Module;
 import com.github.hydrazine.module.ModuleSettings;
 import com.github.hydrazine.util.ConnectionHelper;
+import com.github.hydrazine.util.OperatingSystem;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.client.ClientChatPacket;
 import com.github.steveice10.packetlib.Client;
@@ -27,13 +29,15 @@ import com.github.steveice10.packetlib.event.session.SessionAdapter;
 public class ChatModule implements Module
 {	
 	// Create new file where the configuration will be stored (Same folder as jar file)
-	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getName() + ".conf");
+	private File configFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + ".module_" + getModuleName() + ".conf");
 	
 	// Configuration settings are stored in here
 	private ModuleSettings settings = new ModuleSettings(configFile);
 	
+	private Scanner sc = new Scanner(System.in);
+	
 	@Override
-	public String getName() 
+	public String getModuleName() 
 	{
 		return "chat";
 	}
@@ -57,11 +61,9 @@ public class ChatModule implements Module
 			return;
 		}
 		
-		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getName() + "\'. Press CTRL + C to exit.");
+		System.out.println(Hydrazine.infoPrefix + "Starting module \'" + getModuleName() + "\'. Press CTRL + C to exit.");
 		
 		System.out.println(Hydrazine.infoPrefix + "Note: You can send a message x amount of times by adding a '%x' to the message. (Without the quotes)");
-
-		Scanner sc = new Scanner(System.in);
 		
 		Authenticator auth = new Authenticator();
 		Server server = new Server(Hydrazine.settings.getSetting("host"), Integer.parseInt(Hydrazine.settings.getSetting("port")));
@@ -80,7 +82,7 @@ public class ChatModule implements Module
 			while(client.getSession().isConnected())
 			{
 				doStuff(client, sc);
-			}
+			}			
 			
 			sc.close();
 		}
@@ -111,9 +113,9 @@ public class ChatModule implements Module
 			while(client.getSession().isConnected())
 			{
 				doStuff(client, sc);
-			}
+			}			
 			
-			sc.close();			
+			sc.close();
 		}
 		// User forgot to pass the options
 		else
@@ -125,9 +127,66 @@ public class ChatModule implements Module
 	@Override
 	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
-		
-		System.exit(0);
+		if(!settings.getProperty("reconnect").equals("false"))
+		{
+			System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
+				
+			String s = null;
+			for(String a : Hydrazine.arguments)
+			{
+				if(s == null)
+				{
+					s = a;
+				}
+				else
+				{
+					s = s + " " + a;
+				}						
+			}
+			
+			try
+			{
+				Process p = null;
+				
+				if(OperatingSystem.isWindows(System.getProperty("os.name")))
+				{
+					p = Runtime.getRuntime().exec("cmd /c start cmd.exe /k java -jar Hydrazine.jar " + s);
+					
+					System.out.println("Operating System: " + System.getProperty("os.name"));
+				}
+				else if(OperatingSystem.isLinux(System.getProperty("os.name")))
+				{
+					p = Runtime.getRuntime().exec("xterm " + "-hold " + "-e " + "java " + "-jar " + "Hydrazine.jar " + s);
+					
+					System.out.println("Operating System: " + System.getProperty("os.name"));
+				}
+				else
+				{
+					System.out.println("Reconnect has not been implemented on macOS yet.");
+				}
+				
+				try 
+				{
+					p.waitFor();
+				} 
+				catch (InterruptedException e) 
+				{
+					e.printStackTrace();
+				}
+				
+				System.exit(0);
+			} 
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			System.exit(0);
+			
+			System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
+		}
 	}
 
 	@Override
@@ -153,6 +212,7 @@ public class ChatModule implements Module
 		}
 		
 		settings.setProperty("sendDelay", ModuleSettings.askUser("Delay between sending messages: "));
+		settings.setProperty("reconnect", String.valueOf(ModuleSettings.askUserYesNo("Reconnect automatically?")));
 		
 		// Store configuration variables
 		settings.store();
@@ -180,7 +240,16 @@ public class ChatModule implements Module
 			@Override
 			public void disconnected(DisconnectedEvent event) 
 			{
-				stop(event.getReason());
+				if(settings.getProperty("reconnect").equals("false"))
+				{
+					sc.close();
+					
+					stop(event.getReason());
+				}
+				else
+				{		
+					stop(event.getReason());
+				}
 			}
 		});
 	}
@@ -261,6 +330,12 @@ public class ChatModule implements Module
 				}
 			}
 		}
+	}
+
+	@Override
+	public void run()
+	{
+		start();
 	}
 
 }

@@ -24,7 +24,7 @@ public class MinecraftStatusModule implements Module
 	private final String ANSI_RESET = "\u001B[0m";
 	
 	@Override
-	public String getName() 
+	public String getModuleName() 
 	{
 		return "status";
 	}
@@ -113,7 +113,7 @@ public class MinecraftStatusModule implements Module
 	@Override
 	public void stop(String cause)
 	{
-		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getName() + ": " + cause);
+		System.out.println(Hydrazine.infoPrefix + "Stopping module " + getModuleName() + ": " + cause);
 		
 		System.exit(0);
 	}
@@ -129,6 +129,12 @@ public class MinecraftStatusModule implements Module
 		String operatingSystem = System.getProperty("os.name").toLowerCase();
 		
 		return (operatingSystem.contains("nix") || operatingSystem.contains("nux") || operatingSystem.contains("aix"));
+	}
+	
+	@Override
+	public void run() 
+	{
+		start();
 	}
 	
 }
